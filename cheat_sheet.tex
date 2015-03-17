@@ -7,14 +7,14 @@
 
 % Turn off header and footer
 \pagestyle{empty}
-\geometry{top=.2in,left=.2in,right=.2in,bottom=.2in}
+\geometry{top=.25in,left=.25in,right=.25in,bottom=.25in}
 
 % Redefine section commands to use less space
 \makeatletter
-\renewcommand{\section}{\@startsection{section}{1}{\z@}{5ex}{2ex}
-											 {\normalfont\large\bfseries\underline}}
-\renewcommand{\subsection}{\@startsection{subsection}{2}{\z@}{3ex}{0.5ex}
-													{\normalfont\normalsize\bfseries\textit}}
+\renewcommand{\section}{\@startsection{section}{1}{\z@}{3ex}{2ex}
+											 {\normalfont\large\bfseries\textit}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{\z@}{1ex}{0.5ex}
+													{\normalfont\normalsize\bfseries}}
 \renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{\z@}{-1ex}{0.5ex}
 														 {\normalfont\small\bfseries}}
 \makeatother
@@ -32,7 +32,7 @@
 \newcommand{\bX}{\mathbf{X}}
 \newcommand{\bY}{\mathbf{Y}}
 \newcommand{\btheta}{\boldsymbol{\theta}}
-\newcommand{\ruler}{\rule{8.76cm}{0.pt}\\}
+\newcommand{\ruler}{\\\rule{8.66cm}{0.1pt}\\}
 \newcommand{\norm}[1]{\|#1\|}
 
 % -----------------------------------------------------------------------
@@ -54,8 +54,7 @@
 $P(Y=\pm 1 | X) = \frac{P(X|Y=\pm 1)P(Y=\pm 1)}{P(X|Y= +1)P(Y= +1) + P(X|Y= -1)P(Y= -1)}$
 % --------------------------------
 
-\section{Linear classification}
-\subsection{Perceptron}
+\section{Perceptron}
 $f(\bx) = \btheta \cdot \bx + \theta_0 = \sum_{i=1}^{d}\theta_ix_i + \theta_0$,
 $
 \hat{y} =
@@ -85,8 +84,9 @@ $\btheta = \sum_{i} \alpha_i y_i \bx_i$, thus any inner product space will work,
 \ruler
 \textbf{Gradient descent} view of perceptron, minimize margin cost function
 $J(\btheta) = \sum_{i}(-y_i(\btheta\cdot\bx_i))_{+}$ with $\btheta \leftarrow \btheta - \eta\nabla J(\btheta)$
+% --------------------------------
 
-\subsection{Support Vector Machine}
+\section{Support Vector Machine}
 \textbf{Hard margin SVM},\\
 $\min_{\btheta} \norm{\btheta}^2$, such that $y_i\btheta\cdot\bx_i \geq 1 (i = 1,\dots,n)$\\
 \textbf{Soft margin SVM},\\
