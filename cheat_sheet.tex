@@ -2,7 +2,7 @@
 \usepackage{multicol}
 \usepackage{calc}
 \usepackage[landscape]{geometry}
-\usepackage{amsmath,amsthm,amsfonts,amssymb}
+\usepackage{amsmath,amsthm,amsfonts,amssymb,relsize}
 \usepackage{color,graphicx,overpic}
 
 % Turn off header and footer
@@ -11,18 +11,12 @@
 
 % Redefine section commands to use less space
 \makeatletter
-\renewcommand{\section}{\@startsection{section}{1}{\z@}
-                                {-1ex}%
-                                {0.5ex}%x
-                                {\normalfont\small\bfseries}}
-\renewcommand{\subsection}{\@startsection{subsection}{2}{\z@}%
-                                {-1ex}%
-                                {0.5ex}%
-                                {\normalfont\normalsize\bfseries}}
-\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{\z@}%
-                                {-1ex}%
-                                {0.5ex}%
-                                {\normalfont\small\bfseries}}
+\renewcommand{\section}{\@startsection{section}{1}{\z@}{-1ex}{2ex}
+											 {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{\z@}{5ex}{0.5ex}
+													{\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{\z@}{-1ex}{0.5ex}
+														 {\normalfont\small\bfseries}}
 \makeatother
 
 % Don't print section numbers
@@ -30,6 +24,13 @@
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0pt}
+
+% Math character command.
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\bx}{\mathbf{x}}
+\newcommand{\btheta}{\boldsymbol{\theta}}
+\newcommand{\ruler}{\rule{8.6cm}{0.25pt}\\}
+\newcommand{\norm}[1]{\|#1\|}
 
 % -----------------------------------------------------------------------
 \begin{document}
@@ -44,20 +45,67 @@
 \setlength{\multicolsep}{1pt}
 \setlength{\columnsep}{0pt}
 
-%%%%%%%%%%%%%%%%%%%
-% Matrix Calculus %
-%%%%%%%%%%%%%%%%%%%
-\section{Matrix Calculus}
-\section{Linear Classification}
-\section{Support Vector Machine}
-\section{Decision Theory}
-\section{Generative and Discriminative}
-\section{Estimation}
-\section{Gaussian}
-\section{Regression Regularization}
-\section{Logistic Regression}
-\section{Linear Discriminant Analysis}
-\section{Convex Optimization}
+\section{Linear classification}
+\subsection{Perceptron}
+$f(\bx) = \btheta \cdot \bx + \theta_0 = \sum_{i=1}^{d}\theta_ix_i + \theta_0$,
+$
+\hat{y} =
+\begin{cases}
+    1,	& \text{if } f(x)\geq 0\\
+    -1, & \text{if } f(x) < 0
+\end{cases}
+$
+\ruler
+\textbf{Decision boundary}, a \textbf{hyperplane} in $\R^d$: $H = \{\bx \in \R^d : f(\bx) = 0\} = \{\bx \in \R^d : \btheta \cdot \bx + \theta_0 = 0\}$
+\ruler
+$\btheta$ is the \textbf{normal} of the hyperplane,\\
+$\theta_0$ is the \textbf{offset} of the hyperplane from origin,\\
+$-\frac{\theta_0}{\norm{\btheta}}$ is the \textbf{signed distance} from the origin to hyperplane.
+\ruler
+\textbf{Perceptron algorithm},\\
+Input: $(\bx_1, y_1),\dots,(\bx_n, y_n) \in \R^{d} \times \{\pm 1\}$\\
+while some $y_i \neq \text{sign}(\btheta \cdot \bx_i)$\\
+\-\hspace{0.5cm} pick some misclassified $(\bx_i, y_i)$\\
+\-\hspace{0.5cm} $\btheta \leftarrow \btheta + y_i\bx_i$
+\ruler
+Given a \textbf{linearly separable data}, perceptron algorithm will take no more than $\frac{R^2}{\gamma^2}$ updates to \textbf{converge},
+where $R = \max_{i}{\norm{\bx_i}}$ is the radius of the data, $\gamma = \min_{i}{\frac{y_i(\btheta\cdot\bx_i)}{\norm{\btheta}}}$ is the margin.\\
+Also, $\frac{\btheta\cdot\bx}{\norm{\btheta}}$ is the signed distance from H to $\bx$ in the direction $\btheta$.
+\ruler
+$\btheta = \sum_{i} \alpha_i y_i \bx_i$, thus any inner product space will work, this is a \textbf{kernel}.
+\ruler
+\textbf{Gradient descent} view of perceptron, minimize margin cost function
+$J(\btheta) = \sum_{i}(-y_i(\btheta\cdot\bx_i))_{+}$ with $\btheta \leftarrow \btheta - \eta\nabla J(\btheta)$
+
+\subsection{Support Vector Machine}
+\textbf{Hard margin SVM},\\
+$\min_{\btheta} \norm{\btheta}^2$, such that $y_i\btheta\cdot\bx_i \geq 1 (i = 1,\dots,n)$\\
+\textbf{Soft margin SVM},\\
+$\min_{\btheta} \norm{\btheta}^2 + C\sum_{i=1}^{n}(1-y_i\btheta\cdot\bx_i)_+$
+\ruler
+\textbf{Regularization and SVMs}:
+Simulated data with many features $\phi(\bx)$;
+C controls trade-off between margin $1/\norm{\btheta}$ and fit to data;
+Large C: focus on fit to data (small margin is ok). More overfitting.
+Small C: focus on large margin, less tendency to overfit.
+Overfitting increases with: less data, more features.
+\ruler
+$\btheta = \sum_{j}\alpha_j y_j\bx_j$, $\alpha_j \neq 0$ only for support vectors.
+\ruler
+$K(\bx_i, \bx_j) = \phi(\bx_i)\cdot\phi(\bx_j)$, K is called a kernel.\\
+Solve $\alpha_j$ to determine $\sum_j\alpha_j y_j\phi(\bx_j)$.\\
+Compute the classifier for a test point $\bx$ via $\btheta\cdot\phi(\bx) = \sum_{j}\alpha_j y_j K(\bx_j, \bx)$
+\ruler
+degree-m polynomial kernel: $K_m(\bx, \tilde{\bx}) = (1+\bx\cdot\tilde{\bx})^m$\\
+radial basis function kernel: $K_{rbf}(\bx, \tilde{\bx}) = \text{exp}(-\gamma\norm{\bx-\tilde{\bx}}^2)$
+% \section{Decision Theory}
+% \section{Generative and Discriminative}
+% \section{Estimation}
+% \section{Gaussian}
+% \section{Regression Regularization}
+% \section{Logistic Regression}
+% \section{Linear Discriminant Analysis}
+% \section{Convex Optimization}
 
 \end{multicols*}
 \end{document}
