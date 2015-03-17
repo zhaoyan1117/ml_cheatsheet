@@ -11,10 +11,10 @@
 
 % Redefine section commands to use less space
 \makeatletter
-\renewcommand{\section}{\@startsection{section}{1}{\z@}{-1ex}{2ex}
-											 {\normalfont\large\bfseries}}
-\renewcommand{\subsection}{\@startsection{subsection}{2}{\z@}{5ex}{0.5ex}
-													{\normalfont\normalsize\bfseries}}
+\renewcommand{\section}{\@startsection{section}{1}{\z@}{5ex}{2ex}
+											 {\normalfont\large\bfseries\underline}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{\z@}{3ex}{0.5ex}
+													{\normalfont\normalsize\bfseries\textit}}
 \renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{\z@}{-1ex}{0.5ex}
 														 {\normalfont\small\bfseries}}
 \makeatother
@@ -27,9 +27,12 @@
 
 % Math character command.
 \newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
 \newcommand{\bx}{\mathbf{x}}
+\newcommand{\bX}{\mathbf{X}}
+\newcommand{\bY}{\mathbf{Y}}
 \newcommand{\btheta}{\boldsymbol{\theta}}
-\newcommand{\ruler}{\rule{8.6cm}{0.25pt}\\}
+\newcommand{\ruler}{\rule{8.76cm}{0.pt}\\}
 \newcommand{\norm}[1]{\|#1\|}
 
 % -----------------------------------------------------------------------
@@ -39,11 +42,17 @@
 \begin{multicols*}{3}
 % multicol parameters
 % These lengths are set only within the two main columns
-\setlength{\columnseprule}{0.25pt}
+% \setlength{\columnseprule}{0.1pt}
 \setlength{\premulticols}{1pt}
 \setlength{\postmulticols}{1pt}
 \setlength{\multicolsep}{1pt}
 \setlength{\columnsep}{0pt}
+
+
+\section{Probability}
+\textbf{Bayes Theorem}:\\
+$P(Y=\pm 1 | X) = \frac{P(X|Y=\pm 1)P(Y=\pm 1)}{P(X|Y= +1)P(Y= +1) + P(X|Y= -1)P(Y= -1)}$
+% --------------------------------
 
 \section{Linear classification}
 \subsection{Perceptron}
@@ -98,9 +107,45 @@ Compute the classifier for a test point $\bx$ via $\btheta\cdot\phi(\bx) = \sum_
 \ruler
 degree-m polynomial kernel: $K_m(\bx, \tilde{\bx}) = (1+\bx\cdot\tilde{\bx})^m$\\
 radial basis function kernel: $K_{rbf}(\bx, \tilde{\bx}) = \text{exp}(-\gamma\norm{\bx-\tilde{\bx}}^2)$
-% \section{Decision Theory}
-% \section{Generative and Discriminative}
-% \section{Estimation}
+% --------------------------------
+
+\section{Decision Theory}
+\textbf{Loss function}: $l : \mathcal{Y} \times \mathcal{Y} \rightarrow \R$,
+and $l(\hat{y}, y)$ is the cost of predicting $\hat{y}$ when the outcome is $y$.
+\ruler
+Assume $(\bX, \bY)$ are chosen i.i.d according to some probability distribution on $\mathcal{X}\times\mathcal{Y}$.
+\textbf{Risk} is misclassification probability: $R(f) = \E l(f(\bX), \bY) = Pr(f(\bX) \neq \bY)$
+\ruler
+\textbf{Bayes Decision Rule} is
+$
+f^{*}(x) =
+\begin{cases}
+    1,	& \text{if } P(\bY=1|x) > P(\bY=-1|x) \\
+    -1, & \text{otherwise. }
+\end{cases}
+$,\\
+and the optimal risk (Bayes risk) $R^{*} = \inf_{f}R(f)=R(f^*)$
+\ruler
+\textbf{Excess risk} is for any $f: \mathcal{X} \rightarrow \{-1, +1\}$,\\
+$R(f) - R^* = \E (1[f(x)\neq f^*(x)]|2P(\bY=+1|\bX) - 1|)$
+\ruler
+\textbf{Risk in Regression} is expected  squared error:
+$R(f) = \E l(f(\bX), \bY) = \E \E [f(\bX) - \bY^2 | \bX]$
+\ruler
+\textbf{Bias-variance decomposition}:
+$R(f) = \E[\underbrace{(f(\bX) - \E[\bY|\bX])^2}_{\text{bias}^2}] + \E[\underbrace{(\E[\bY|\bX]-\bY)^2}_{\text{variance}}]$
+% --------------------------------
+
+\section{Generative and Discriminative}
+\textbf{Discriminative models}: $P(\bX, \bY) = P(\bX)P(\bY|\bX)$.\\
+Estimate $P(\bY|\bX)$, then pretend out estimate $\hat{P}(\bY|\bX)$ is the actual $P(\bY|\bX)$ and
+plug in bayes rule expression.
+\ruler
+\textbf{Generative model}: $P(\bX, \bY) = P(\bY)P(\bX|\bY)$.\\
+Estimate $P(\bY)$ and $P(\bX|\bY)$, then use bayes theorem to calculate $P(\bY|\bX)$ and use discriminative model.
+% --------------------------------
+
+\section{Estimation}
 % \section{Gaussian}
 % \section{Regression Regularization}
 % \section{Logistic Regression}
