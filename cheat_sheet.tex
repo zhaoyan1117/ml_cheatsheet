@@ -13,7 +13,7 @@
 \makeatletter
 \renewcommand{\section}{\@startsection{section}{1}{\z@}{3ex}{2ex}
                        {\normalfont\large\bfseries\textit}}
-\renewcommand{\subsection}{\@startsection{subsection}{2}{\z@}{1ex}{0.5ex}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{\z@}{2ex}{0.5ex}
                           {\normalfont\normalsize\bfseries}}
 \renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{\z@}{-1ex}{0.5ex}
                              {\normalfont\small\bfseries}}
@@ -30,8 +30,9 @@
 \newcommand{\E}{\mathbb{E}}
 
 \newcommand{\bb}{\mathbf{b}}
-\newcommand{\bx}{\mathbf{x}}
 \newcommand{\bv}{\mathbf{v}}
+\newcommand{\bx}{\mathbf{x}}
+\newcommand{\by}{\mathbf{y}}
 
 \newcommand{\bA}{\mathbf{A}}
 \newcommand{\bI}{\mathbf{I}}
@@ -39,17 +40,18 @@
 \newcommand{\bY}{\mathbf{Y}}
 \newcommand{\bZ}{\mathbf{Z}}
 
+\newcommand{\bbeta}{\boldsymbol{\beta}}
 \newcommand{\btheta}{\boldsymbol{\theta}}
 \newcommand{\bmu}{\boldsymbol{\mu}}
 \newcommand{\bxi}{\boldsymbol{\xi}}
 \newcommand{\bSigma}{\boldsymbol{\Sigma}}
 \newcommand{\bLambda}{\boldsymbol{\Lambda}}
 
-\newcommand{\tp}[1]{#1^{T}}
+\newcommand{\tp}[1]{#1^{\prime}}
 \newcommand{\inv}[1]{#1^{-1}}
 \newcommand{\norm}[1]{\|#1\|}
 \newcommand{\gaussian}[2]{\mathcal{N}(#1, #2)}
-
+\newcommand{\inR}[2]{#1 \in \R^{#2}}
 \newcommand{\ruler}{\\\rule{\columnwidth}{0.25pt}\\}
 
 % -----------------------------------------------------------------------
@@ -81,7 +83,7 @@ $
 \end{cases}
 $
 \ruler
-\textbf{Decision boundary}, a \textbf{hyperplane} in $\R^d$: $H = \{\bx \in \R^d : f(\bx) = 0\} = \{\bx \in \R^d : \btheta \cdot \bx + \theta_0 = 0\}$
+\textbf{Decision boundary}, a \textbf{hyperplane} in $\R^d$: $H = \{\inR{\bx}{d} : f(\bx) = 0\} = \{\inR{\bx}{d} : \btheta \cdot \bx + \theta_0 = 0\}$
 \ruler
 $\btheta$ is the \textbf{normal} of the hyperplane,\\
 $\theta_0$ is the \textbf{offset} of the hyperplane from origin,\\
@@ -150,7 +152,10 @@ $R(f) - R^* = \E (1[f(x)\neq f^*(x)]|2P(\bY=+1|\bX) - 1|)$
 $R(f) = \E l(f(\bX), \bY) = \E \E [f(\bX) - \bY^2 | \bX]$
 \ruler
 \textbf{Bias-variance decomposition}:
-$R(f) = \E[\underbrace{(f(\bX) - \E[\bY|\bX])^2}_{\text{bias}^2}] + \E[\underbrace{(\E[\bY|\bX]-\bY)^2}_{\text{variance}}]$
+$R(f) = \E[\underbrace{(f(\bX) - \E[\bY|\bX])^2}_{\text{bias}^2}] + \E[\underbrace{(\E[\bY|\bX]-\bY)^2}_{\text{variance}}]$\\
+$R(f) = \E[(f(\bX) - f^*(\bX))^2] + \E[(f^*(\bX)-\bY)^2]$\\
+$R(f) = \E[(f(\bX) - f^*(\bX))^2] + R(f*)$\\
+$R(f) - R(f*) = \E[(f(\bX) - f^*(\bX))^2]$, $f^*(\bX) = \E[\bY|\bX]$\\
 % --------------------------------
 
 \section{Generative and Discriminative}
@@ -181,22 +186,22 @@ crafted for desired probability.
 Treat parameter as a random variable, then update based on observed value (data).\\
 Prior: $\pi(p) = 1$,\\
 Posterior: $P(p|\bX_1 = 1) = P(\bX_1 = 1|p)\pi(p) / \int P(X_1 = 1|q)d\pi(q)$
-\ruler
+\\\vspace{10pt}%\ruler
 \textbf{Maximum a posterior probability}: the mode of the posterior. If uniform prior, MAP is MLE; if not
 uniform prior, MAP is Penalized MLE.
 % --------------------------------
 
 \section{Multivariate Normal Distribution}
-$\bx \in \R^d: p(x) = \frac{1}{(2\pi)^{d/2}|\bSigma|^{1/2}}e^{(-\frac{1}{2}\tp{(\bx-\bmu)}\inv{\bSigma}(\bx-\bmu))}$
+$\inR{\bx}{d}: p(x) = \frac{1}{(2\pi)^{d/2}|\bSigma|^{1/2}}e^{(-\frac{1}{2}\tp{(\bx-\bmu)}\inv{\bSigma}(\bx-\bmu))}$
 \ruler
 \textbf{Covariance matrix}:
 $\bSigma = \E(\bX - \bmu)\tp{(\bX - \bmu)}$\\
 Symmetric: $\bSigma_{i,j} = \bSigma_{j_i}$\\
 Non-negative diagonal entries: $\bSigma{i,i} \geq 0$\\
-Positive semidefinite: $\forall \bv \in \R^d, \tp{\bv}\bSigma\bv \geq 0$
+Positive semidefinite: $\forall \inR{\bv}{d}, \tp{\bv}\bSigma\bv \geq 0$
 \ruler
 \textbf{Super-level} sets of pdf:
-$\bxi_r = \left\{ \bx \in \R^d : \tp{(\bx - \bmu)}\inv{\bSigma}(\bx-\bmu)\leq r^2 \right\}$.\\
+$\bxi_r = \left\{ \inR{\bx}{d} : \tp{(\bx - \bmu)}\inv{\bSigma}(\bx-\bmu)\leq r^2 \right\}$.\\
 $\text{Volume of } \bxi_r \propto \prod^{d}_{i=1}\sigma_i = \sqrt{|\bSigma|}$
 \ruler
 \textbf{Spectral Theorem} for \textbf{non-diagonal covariance}:\\
@@ -210,10 +215,10 @@ Given a $d$-dimensaional Gaussian $\bX \sim \gaussian{\bmu}{\bSigma}$,\\
 write $\bX = \left[ \begin{smallmatrix} \bY \\ \bZ \end{smallmatrix} \right]$,
 $\bmu = \left[ \begin{smallmatrix} \bmu_\bY \\ \bmu_\bZ \end{smallmatrix} \right]$,
 $\bSigma = \left[ \begin{smallmatrix} \bSigma_{\bY\bY} & \bSigma_{\bY\bZ} \\ \bSigma_{\bZ\bY} & \bSigma_{\bZ\bZ} \end{smallmatrix} \right]$,\\
-where $\bY \in \R^m$, and $\bZ \in \R^{d-m}$. Then $\bY \sim \gaussian{\mu_\bY}{\bSigma_{\bY\bY}}$
+where $\inR{\bY}{m}$, and $\inR{\bZ}{d-m}$. Then $\bY \sim \gaussian{\mu_\bY}{\bSigma_{\bY\bY}}$
 \ruler
 Given a $d$-dimensaional Gaussian $\bX \sim \gaussian{\bmu}{\bSigma}$,\\
-matrix $\bA \in \R^{m\times d}$ and vector $\bb \in \R^m$, define $\bY = \bA\bX + \bb$.\\
+matrix $\inR{\bA}{m\times d}$ and vector $\inR{\bb}{m}$, define $\bY = \bA\bX + \bb$.\\
 Then $\bY \sim \gaussian{\bA\bmu + \bb}{\bA\bSigma\tp{\bA}}$
 \ruler
 Given a $d$-dimensaional Gaussian $\bX \sim \gaussian{\bmu}{\bSigma}$,\\
@@ -223,8 +228,73 @@ $\bY = \bSigma^{-\frac{1}{2}}(\bX-\bmu) \sim \gaussian{\mathbf{0}, \bI}$
 \textbf{Gaussian maximum likelihood estimation}:\\
 Sample mean: $\hat{\bmu} = \frac{1}{n}\sum_{i=1}^{n}\bx_i$;\\
 Sample covariance: $\hat{\bSigma} = \frac{1}{n}\sum_{i=1}^{n}(\bx_i - \hat{\bmu})\tp{(\bx_i - \hat{\bmu})}$
+% --------------------------------
 
-% \section{Regression Regularization}
+\section{Linear Regression}
+Given $\inR{\bX}{p}$, $Y \in \R$, consider linear(affine) prediction rules,\\
+$F_{\text{lin}} := \{ \bx \mapsto \tp{\bx}\bbeta + \beta_0 : \inR{\bbeta}{p}, \beta_0 \in \R \}$
+\subsection{Empirical risk minimization}
+\textbf{Empirical risk} is the sample average of squared error:\\
+$\hat{R}(f) = \hat{\E}_n \ell(f(\bX), Y) = \frac{1}{n}\sum_{i=1}{n}(f(\bX_i) - Y_i)^2$
+\ruler
+Choose $\hat{f} := \text{arg } min_{f \in F_\text{lin}} \hat{\E}_n \ell(f(\bX), Y)$
+\ruler
+Find $\hat{f} : \bx \mapsto \tp{\bx}\hat{\bbeta}$, such that\\
+$
+\hat{\bbeta} = \text{arg } min_{\inR{\bbeta}{p}}\sum_{i=1}^{n}(\tp{\bX_i}\bbeta - Y_i)^2
+             = \text{arg } min_{\inR{\bbeta}{p}}\underbrace{\norm{\bX\bbeta - \by}^2}_\text{RSS}
+$\\
+where \textbf{design matrix} $\inR{\bX}{n \times p}$ and \textbf{response vector} $\inR{\by}{n}$.
+\\\vspace{10pt}%\ruler
+\textbf{Normal equations}:
+$\tp{\bX}\bX\bbeta = \tp{\bX}\by \Rightarrow \hat{\bbeta} = \inv{(\tp{\bX}\bX)}\tp{\bX}\by$
+\ruler
+\textbf{Projection Theorem} also leads to normal equations:\\
+$\inv{(\by-\hat{\by})}\bX = 0 \Leftrightarrow \tp{\bX}(\by-\bX\bbeta) = 0 \Leftrightarrow \tp{\bX}\by=\tp{\bX}\bX\bbeta$
+\subsection{Linear model with additive Gaussian noise}
+Model the conditional distribution of $Y$ given $\bX = \bx$ as:
+$P(Y|\bX=\bx) = \gaussian{\tp{\bx}\bbeta}{\sigma^2}$\\
+Equivalently: $Y = \tp{\bx}\bbeta + \epsilon$, where $\epsilon \sim \gaussian{\mathbf{0}}{\sigma^2}$
+\ruler
+\textbf{Maximum likelihood} is least square:\\
+$
+L(\bbeta) = \prod_{i=1}^{n}p(Y_i|\bX_i,\bbeta) \Leftrightarrow
+\ell(\bbeta) = g(\sigma^2)-\frac{1}{2\sigma^2}\sum_{i=1}^{n}(y_i-\tp{\bX}\bbeta)^2
+$
+\ruler
+Fix $\bX$. Provided $\E\by=\bX\bbeta$ and $\text{Cov}(\by)=\sigma^2\bI$
+\ruler
+\textbf{Bayesian analysis}:
+Treat $\bbeta$ as a r.v. with prior distribution $\gaussian{\mathbf{0}}{\tau^2\bI}$,
+then compute posterior distribution $P(\bbeta|\bX, Y)$.
+\ruler
+$P(\bbeta|\bX_1, Y_1,\dots,\bX_n,Y_n) \propto P(Y_1,\dots,Y_n|\bbeta,\bX_1,\dots,\bX_n)P(\bbeta)$\\
+$P(\bbeta|\bX_1, Y_1,\dots,\bX_n,Y_n) \propto exp(-\frac{1}{2}(\sum_{i=1}^{n}\frac{(Y_i-\tp{\bX}_i\bbeta)^2}{\sigma^2}+\frac{1}{\tau^2}\norm{\bbeta}^2))$
+% --------------------------------
+
+\section{Linear Regression Regularization}
+\textbf{Trading off bias and variance}: some increase in bias can give a big decrease in variance.
+\ruler
+\textbf{Subset selection} is like $L0$ regularization:
+RSS decreases as the complexity increases because the best fit with a smaller subset is always possible with a larger subset.
+\ruler
+\textbf{Find a path through subset space}: using cross-validation and forward-stepwise selection or backward-stepwise selection (need $n > p$).
+\ruler
+\textbf{Ridge regression} is like $L2$ regularization:
+$\hat{\bbeta} = \text{arg }\min_{\bbeta}(\sum_{i=1}^n(y_i-\tp{\bx}_i\bbeta)^2 + \lambda\sum_{j=1}{p}\beta_j^2)$\\
+$\hat{\bbeta}^{\text{ridge}}=\inv{(\tp{\bX}\bX+\lambda\bI)}\tp{\bx}\by$
+\ruler
+\textbf{Lasso regression} is like $L1$ regularization:
+$\hat{\bbeta} = \text{arg }\min_{\bbeta}(\sum_{i=1}^n(y_i-\tp{\bx}_i\bbeta)^2 + \lambda\sum_{j=1}{p}|\beta_j|)$
+\ruler
+While ridge regression leads to reduced, but non-zero values of the coefficients,
+Lasso regression forces some coefficients to be zero.
+\ruler
+\textbf{Bayesian analysis}:
+Ridge regression is equivalent to a MAP estimate with a gaussian prior.
+Lasso regression is equivalent to a MAP estimate with a Laplace prior.
+% --------------------------------
+
 % \section{Logistic Regression}
 % \section{Linear Discriminant Analysis}
 % \section{Convex Optimization}
