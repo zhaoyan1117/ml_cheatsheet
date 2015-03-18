@@ -41,6 +41,7 @@
 
 \newcommand{\btheta}{\boldsymbol{\theta}}
 \newcommand{\bmu}{\boldsymbol{\mu}}
+\newcommand{\bxi}{\boldsymbol{\xi}}
 \newcommand{\bSigma}{\boldsymbol{\Sigma}}
 \newcommand{\bLambda}{\boldsymbol{\Lambda}}
 
@@ -183,9 +184,6 @@ Posterior: $P(p|\bX_1 = 1) = P(\bX_1 = 1|p)\pi(p) / \int P(X_1 = 1|q)d\pi(q)$
 \ruler
 \textbf{Maximum a posterior probability}: the mode of the posterior. If uniform prior, MAP is MLE; if not
 uniform prior, MAP is Penalized MLE.
-\\%\ruler
-\textbf{Gaussian maximum likelihood estimation}:\\
-$\mu = \frac{1}{n}\sum_{i=1}^{n}x_i$, $\sigma^2 = \frac{1}{n}\sum_{i=1}^{n}(x_i - \mu)^2$
 % --------------------------------
 
 \section{Multivariate Normal Distribution}
@@ -196,6 +194,10 @@ $\bSigma = \E(\bX - \bmu)\tp{(\bX - \bmu)}$\\
 Symmetric: $\bSigma_{i,j} = \bSigma_{j_i}$\\
 Non-negative diagonal entries: $\bSigma{i,i} \geq 0$\\
 Positive semidefinite: $\forall \bv \in \R^d, \tp{\bv}\bSigma\bv \geq 0$
+\ruler
+\textbf{Super-level} sets of pdf:
+$\bxi_r = \left\{ \bx \in \R^d : \tp{(\bx - \bmu)}\inv{\bSigma}(\bx-\bmu)\leq r^2 \right\}$.\\
+$\text{Volume of } \bxi_r \propto \prod^{d}_{i=1}\sigma_i = \sqrt{|\bSigma|}$
 \ruler
 \textbf{Spectral Theorem} for \textbf{non-diagonal covariance}:\\
 $U = [\bv_1, \bv_2, \dots, \bv_n], \bLambda = \text{diag}(\tp{[\lambda_1, \lambda_2, \dots, \lambda_n]})$\\
@@ -217,6 +219,11 @@ Then $\bY \sim \gaussian{\bA\bmu + \bb}{\bA\bSigma\tp{\bA}}$
 Given a $d$-dimensaional Gaussian $\bX \sim \gaussian{\bmu}{\bSigma}$,\\
 with $\bSigma$ positive definite,\\
 $\bY = \bSigma^{-\frac{1}{2}}(\bX-\bmu) \sim \gaussian{\mathbf{0}, \bI}$
+\ruler
+\textbf{Gaussian maximum likelihood estimation}:\\
+Sample mean: $\hat{\bmu} = \frac{1}{n}\sum_{i=1}^{n}\bx_i$;\\
+Sample covariance: $\hat{\bSigma} = \frac{1}{n}\sum_{i=1}^{n}(\bx_i - \hat{\bmu})\tp{(\bx_i - \hat{\bmu})}$
+
 % \section{Regression Regularization}
 % \section{Logistic Regression}
 % \section{Linear Discriminant Analysis}
