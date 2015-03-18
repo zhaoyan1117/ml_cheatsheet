@@ -337,7 +337,15 @@ $\ell_\text{log}(\hat{p}(\cdot|\bx),y)=-\log(\hat{p}(y|\bx))$\\
 $\frac{1}{n}\sum_{i=1}^{n}\log(1+\text{exp}(-y_i\tp{\bbeta}\bx_i))$
 % --------------------------------
 
-% \section{Linear Discriminant Analysis}
+\section{Linear Discriminant Analysis}
+\textbf{Linear discriminant functions}:\\
+$\delta_k(\bx) = \tp{\bmu}_k\inv{\bSigma}\bx - \frac{1}{2}\tp{\bmu}_k\inv{\bSigma}\bmu_k + \log\pi_k$
+\ruler
+\textbf{Estimate with Maximum likelihood}:\\
+$\pi_k = P(Y=k) \Leftrightarrow \hat{\pi}_k = \frac{n_k}{n}$\\
+$\bmu_k = \E[\bX|Y=k] \Leftrightarrow \hat{\bmu}_k = \frac{1}{n_k}\sum_{i:y_i=k}\bx_i$\\
+$\bSigma = \text{Var}[\bX|Y=k] \Leftrightarrow \hat{\bSigma} = \frac{1}{n}\sum_{k}\sum{i:y_i=k}(\bx_i-\bmu_k)\tp{(\bx_i-\bmu_k)}$
+
 % \section{Convex Optimization}
 \end{multicols*}
 \end{document}
