@@ -12,11 +12,9 @@
 % Redefine section commands to use less space
 \makeatletter
 \renewcommand{\section}{\@startsection{section}{1}{\z@}{3ex}{2ex}
-                       {\normalfont\large\bfseries\textit}}
+                       {\normalfont\normalsize\bfseries\textit}}
 \renewcommand{\subsection}{\@startsection{subsection}{2}{\z@}{2ex}{0.5ex}
-                          {\normalfont\normalsize\bfseries}}
-\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{\z@}{-1ex}{0.5ex}
-                             {\normalfont\small\bfseries}}
+                          {\normalfont\small\bfseries}}
 \makeatother
 
 % Don't print section numbers
@@ -35,11 +33,14 @@
 \newcommand{\by}{\mathbf{y}}
 
 \newcommand{\bA}{\mathbf{A}}
+\newcommand{\bB}{\mathbf{B}}
+\newcommand{\bH}{\mathbf{H}}
 \newcommand{\bI}{\mathbf{I}}
 \newcommand{\bX}{\mathbf{X}}
 \newcommand{\bY}{\mathbf{Y}}
 \newcommand{\bZ}{\mathbf{Z}}
 
+\newcommand{\balpha}{\boldsymbol{\alpha}}
 \newcommand{\bbeta}{\boldsymbol{\beta}}
 \newcommand{\btheta}{\boldsymbol{\theta}}
 \newcommand{\bmu}{\boldsymbol{\mu}}
@@ -47,6 +48,7 @@
 \newcommand{\bSigma}{\boldsymbol{\Sigma}}
 \newcommand{\bLambda}{\boldsymbol{\Lambda}}
 
+\newcommand{\diag}{\text{diag}}
 \newcommand{\tp}[1]{#1^{\prime}}
 \newcommand{\inv}[1]{#1^{-1}}
 \newcommand{\norm}[1]{\|#1\|}
@@ -67,10 +69,16 @@
 \setlength{\multicolsep}{1pt}
 \setlength{\columnsep}{0pt}
 
-
 \section{Probability}
 \textbf{Bayes Theorem}:\\
 $P(Y=\pm 1 | X) = \frac{P(X|Y=\pm 1)P(Y=\pm 1)}{P(X|Y= +1)P(Y= +1) + P(X|Y= -1)P(Y= -1)}$
+% --------------------------------
+
+\section{Matrix calculus}
+$f(\bx) = \tp{\bx}\bA\bB + \bA\bB\bx + \tp{\bx}\bA\bB\bx \Leftrightarrow \frac{df(\bx)}{d\bx} = \bA\bB + \bA\bB + 2\bA\bB\bx$
+\ruler
+$\bH_{i,j}=\frac{\partial^2 f}{\partial x_i \partial x_j}$;
+$\nabla_{x}(a\bx) = a\bI$
 % --------------------------------
 
 \section{Perceptron}
@@ -119,7 +127,8 @@ Small C: focus on large margin, less tendency to overfit.
 Overfitting increases with: less data, more features.
 \ruler
 $\btheta = \sum_{j}\alpha_j y_j\bx_j$, $\alpha_j \neq 0$ only for support vectors.
-\ruler
+\columnbreak\\
+% \ruler
 $K(\bx_i, \bx_j) = \phi(\bx_i)\cdot\phi(\bx_j)$, K is called a kernel.\\
 Solve $\alpha_j$ to determine $\sum_j\alpha_j y_j\phi(\bx_j)$.\\
 Compute the classifier for a test point $\bx$ via $\btheta\cdot\phi(\bx) = \sum_{j}\alpha_j y_j K(\bx_j, \bx)$
@@ -174,7 +183,8 @@ $\bbeta = \inv{\Sigma}(\bmu_{1}-\bmu_{0})$, $\beta_0=\frac{\tp{\bmu_{0}}\inv{\Si
 \section{Estimation}
 \textbf{Method of moments}:
 Match moments of the distribution to momemnts measured in the data.
-\ruler
+% \ruler
+\columnbreak\\
 \textbf{Maximum likelihood}:
 Choose parameter so that the distribution it defines gives the obverved data the highest probability (likelihood).
 \ruler
@@ -185,12 +195,11 @@ since it can change $\prod$ to $\sum$.
 \textbf{Penalized maximum likelihood}:
 Add a penalty term in the maximum (log) likelihood equation; treat the penalty term as some imaginary data points
 crafted for desired probability.
-% \ruler
+\ruler
 \textbf{Bayesian estimate}:
 Treat parameter as a random variable, then update based on observed value (data).\\
 Prior: $\pi(p) = 1$,\\
 Posterior: $P(p|\bX_1 = 1) = P(\bX_1 = 1|p)\pi(p) / \int P(X_1 = 1|q)d\pi(q)$
-% \\\vspace{10pt}
 \ruler
 \textbf{Maximum a posterior probability}: the mode of the posterior. If uniform prior, MAP is MLE; if not
 uniform prior, MAP is Penalized MLE.
@@ -210,7 +219,7 @@ $\bxi_r = \left\{ \inR{\bx}{d} : \tp{(\bx - \bmu)}\inv{\bSigma}(\bx-\bmu)\leq r^
 $\text{Volume of } \bxi_r \propto \prod^{d}_{i=1}\sigma_i = \sqrt{|\bSigma|}$
 \ruler
 \textbf{Spectral Theorem} for \textbf{non-diagonal covariance}:\\
-$U = [\bv_1, \bv_2, \dots, \bv_n], \bLambda = \text{diag}(\tp{[\lambda_1, \lambda_2, \dots, \lambda_n]})$\\
+$U = [\bv_1, \bv_2, \dots, \bv_n], \bLambda = \diag(\tp{[\lambda_1, \lambda_2, \dots, \lambda_n]})$\\
 We can eigen decompose $\inv{\bSigma} = U\inv{\bLambda}\tp{U}$, this is like to change to a different eigen spaces, where covariances ($\bLambda$) diagonal axis-alianed.
 \ruler
 Assume independent,
@@ -242,8 +251,7 @@ $F_{\text{lin}} := \{ \bx \mapsto \tp{\bx}\bbeta + \beta_0 : \inR{\bbeta}{p}, \b
 \textbf{Empirical risk} is the sample average of squared error:\\
 $\hat{R}(f) = \hat{\E}_n \ell(f(\bX), Y) = \frac{1}{n}\sum_{i=1}{n}(f(\bX_i) - Y_i)^2$\\
 Choose $\hat{f} := \text{arg } min_{f \in F_\text{lin}} \hat{\E}_n \ell(f(\bX), Y)$
-\\\vspace{100pt}
-% \ruler
+\ruler
 Find $\hat{f} : \bx \mapsto \tp{\bx}\hat{\bbeta}$, such that\\
 $
 \hat{\bbeta} = \text{arg } min_{\inR{\bbeta}{p}}\sum_{i=1}^{n}(\tp{\bX_i}\bbeta - Y_i)^2
@@ -291,7 +299,8 @@ $\hat{\bbeta}^{\text{ridge}}=\inv{(\tp{\bX}\bX+\lambda\bI)}\tp{\bx}\by$
 \ruler
 \textbf{Lasso regression} is like $L1$ regularization:
 $\hat{\bbeta} = \text{arg }\min_{\bbeta}(\sum_{i=1}^n(y_i-\tp{\bx}_i\bbeta)^2 + \lambda\sum_{j=1}{p}|\beta_j|)$
-\ruler
+% \ruler
+\columnbreak\\
 While ridge regression leads to reduced, but non-zero values of the coefficients,
 Lasso regression forces some coefficients to be zero.
 \ruler
@@ -313,7 +322,7 @@ where $\mu_i(\bbeta) = P(Y=1|\bX=\bx_i,\bbeta)=\frac{1}{1+\text{exp}(-\tp{\bbeta
 \ruler
 $\nabla_{\bbeta}\mu_i(\bbeta) = \mu_i(\bbeta)(1-\mu_i(\bbeta))\bx_i$\\
 $\nabla_{\bbeta}\ell(\bbeta)=\sum_{i=1}^{n}(y_i-\mu_i(\bbeta))\bx_i = \tp{\bX}(\by-\bmu)$\\
-$\nabla_{\bbeta}^2\ell(\bbeta)=\sum_{i=1}^{n}-\mu_i(\bbeta)(1-\mu_i(\bbeta))\bx_i\tp{\bx}_i = -\tp{\bX}\text{diag}(\bmu(1-\bmu))\bX$
+$\nabla_{\bbeta}^2\ell(\bbeta)=\sum_{i=1}^{n}-\mu_i(\bbeta)(1-\mu_i(\bbeta))\bx_i\tp{\bx}_i = -\tp{\bX}\diag(\bmu(1-\bmu))\bX$
 $\hat{\bbeta}^{\text{ml}}$ solves: $\sum_{i=1}^{n}y_i\bx_i=\sum_{i=1}^{n}\mu_i{\bbeta}\bx_i$
 \ruler
 \textbf{Gradient ascent}:\\
@@ -346,6 +355,37 @@ $\pi_k = P(Y=k) \Leftrightarrow \hat{\pi}_k = \frac{n_k}{n}$\\
 $\bmu_k = \E[\bX|Y=k] \Leftrightarrow \hat{\bmu}_k = \frac{1}{n_k}\sum_{i:y_i=k}\bx_i$\\
 $\bSigma = \text{Var}[\bX|Y=k] \Leftrightarrow \hat{\bSigma} = \frac{1}{n}\sum_{k}\sum{i:y_i=k}(\bx_i-\bmu_k)\tp{(\bx_i-\bmu_k)}$
 
-% \section{Convex Optimization}
+\section{SVM with Convex Optimization}
+\textbf{Lagrangian}: rewrite constraint as penalties for a convex optimization problem
+such that $L(x,\lambda)=f_0(x)+\sum_{i=1}^{m}\lambda_{i}f_{i}(x)$.
+\ruler
+\textbf{Weak duality}:
+$\underbrace{p^*=\min_{x}\max_{\lambda\geq0}L(x,\lambda)}_\text{primal}\geq\underbrace{\max_{\lambda\geq0}\min_{x}L(x,\lambda)=d^*}_\text{dual}$
+% \ruler
+\columnbreak\\
+\textbf{Strong duality}: \\
+if there is a saddle point $(x^*, \lambda^*)$ such that for all $x$ and $\lambda\geq0$,
+$L(x^*,\lambda)\leq L(x^*,\lambda^*)\leq L(x,\lambda^*)$, then primal and dual have the same value ($p^* = d^*$).
+\textbf{Karush-Kuhn-Tucker optimality conditions}:\\
+Primal feasibility: $f_i(x)\leq0$; Dual feasibility: $\lambda_i\geq0$\\
+Complementary slackness: $\lambda_i f_i(x)=0$\\
+Stationarity: $\nabla f_0(x)+\sum_{i}\lambda_i\nabla f_i(x) = 0$
+\ruler
+\textbf{Hard margin SVM}:\\
+$L(\btheta,\alpha) = \frac{1}{2}\norm{\btheta}^2 + \sum_{i=1}^{n}\alpha_i(1-y_i\tp{\btheta}\bx_i)$\\
+$g(\alpha)=\min_{\btheta} L(\btheta,\alpha)$\\
+setting $\btheta^* = \sum_{i=1}^{n}\alpha_i y_i \bx_i$,\\
+$g(\alpha)=\sum_{i=1}^{n}\alpha_i-\frac{1}{2}\sum_{i,j}\alpha_{i}\alpha_{j}y_{i}y_{j}\tp{\bx}_{i}\bx_{j}$
+\ruler
+\textbf{Hard margein SVM dual problem}:
+$\max_{\alpha} \sum_{i=1}^{n}\alpha_i-\frac{1}{2}\sum_{i,j}\alpha_{i}\alpha_{j}y_{i}y_{j}\tp{\bx}_{i}\bx_{j}$, s.t. $\alpha_i\geq0$ $(i=1,\dots,n)$.
+$\min_{\balpha} \frac{1}{2}\tp{\balpha}\diag(\by)\mathbf{K}\diag(\by)\balpha - \tp{\balpha}\mathbf{1}$, s.t. $\balpha\geq\mathbf{0}$.
+\ruler
+\textbf{Soft margin SVM}:\\
+$L(\btheta,\xi,\alpha,\lambda) = \frac{1}{2}\norm{\btheta}^2 + \frac{C}{n}\sum_{i=1}^{n}\xi_i + \sum_{i=1}^{n}\alpha_i(1-y_i\tp{\btheta}\bx_i-\xi_i) - \sum_{i=1}^{n}\lambda_i\xi_i$
+\ruler
+\textbf{Soft margein SVM dual problem}:
+$\min_{\balpha} \frac{1}{2}\tp{\balpha}\diag(\by)\mathbf{K}\diag(\by)\balpha - \tp{\balpha}\mathbf{1}$, s.t. $\mathbf{0}\leq\balpha\leq\frac{C}{n}$.
+
 \end{multicols*}
 \end{document}
