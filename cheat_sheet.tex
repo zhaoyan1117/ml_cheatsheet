@@ -12,11 +12,11 @@
 % Redefine section commands to use less space
 \makeatletter
 \renewcommand{\section}{\@startsection{section}{1}{\z@}{3ex}{2ex}
-											 {\normalfont\large\bfseries\textit}}
+                       {\normalfont\large\bfseries\textit}}
 \renewcommand{\subsection}{\@startsection{subsection}{2}{\z@}{1ex}{0.5ex}
-													{\normalfont\normalsize\bfseries}}
+                          {\normalfont\normalsize\bfseries}}
 \renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{\z@}{-1ex}{0.5ex}
-														 {\normalfont\small\bfseries}}
+                             {\normalfont\small\bfseries}}
 \makeatother
 
 % Don't print section numbers
@@ -32,7 +32,7 @@
 \newcommand{\bX}{\mathbf{X}}
 \newcommand{\bY}{\mathbf{Y}}
 \newcommand{\btheta}{\boldsymbol{\theta}}
-\newcommand{\ruler}{\\\rule{8.66cm}{0.1pt}\\}
+\newcommand{\ruler}{\\\rule{\columnwidth}{0.25pt}\\}
 \newcommand{\norm}[1]{\|#1\|}
 
 % -----------------------------------------------------------------------
@@ -59,7 +59,7 @@ $f(\bx) = \btheta \cdot \bx + \theta_0 = \sum_{i=1}^{d}\theta_ix_i + \theta_0$,
 $
 \hat{y} =
 \begin{cases}
-    1,	& \text{if } f(x)\geq 0\\
+    1,  & \text{if } f(x)\geq 0\\
     -1, & \text{if } f(x) < 0
 \end{cases}
 $
@@ -120,7 +120,7 @@ Assume $(\bX, \bY)$ are chosen i.i.d according to some probability distribution 
 $
 f^{*}(x) =
 \begin{cases}
-    1,	& \text{if } P(\bY=1|x) > P(\bY=-1|x) \\
+    1,  & \text{if } P(\bY=1|x) > P(\bY=-1|x) \\
     -1, & \text{otherwise. }
 \end{cases}
 $,\\
@@ -146,6 +146,30 @@ Estimate $P(\bY)$ and $P(\bX|\bY)$, then use bayes theorem to calculate $P(\bY|\
 % --------------------------------
 
 \section{Estimation}
+\textbf{Method of moments}:
+Match moments of the distribution to momemnts measured in the data.
+\ruler
+\textbf{Maximum likelihood}:
+Choose parameter so that the distribution it defines gives the obverved data the highest probability (likelihood).
+\ruler
+\textbf{Maximum log likelihood}:
+Log of maximum likelihood, equilvalent to maximum likelihood since log is monotonically increase; it is useful
+since it can change $\prod$ to $\sum$.
+\ruler
+\textbf{Penalized maximum likelihood}:
+Add a penalty term in the maximum (log) likelihood equation; treat the penalty term as some imaginary data points
+crafted for desired probability.
+\ruler
+\textbf{Bayesian estimate}:
+Treat parameter as a random variable, then update based on observed value (data).\\
+Prior: $\pi(p) = 1$,\\
+Posterior: $P(p|\bX_1 = 1) = P(\bX_1 = 1|p)\pi(p) / \int P(X_1 = 1|q)d\pi(q)$
+\ruler
+\textbf{Maximum a posterior probability}: the mode of the posterior. If uniform prior, MAP is MLE; if not
+uniform prior, MAP is Penalized MLE.
+\\%\ruler
+\textbf{Gaussian maximum likelihood estimation}:\\
+$\mu = \frac{1}{n}\sum_{i=1}^{n}x_i$, $\sigma^2 = \frac{1}{n}\sum_{i=1}^{n}(x_i - \mu)^2$
 % \section{Gaussian}
 % \section{Regression Regularization}
 % \section{Logistic Regression}
