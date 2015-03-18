@@ -321,7 +321,21 @@ $\bbeta^{(t+1)}=\bbeta^{(t)}+\eta\nabla_{\bbeta}\ell(\bbeta^{(t)})$ : $O(np)$/st
 \textbf{Stochastic gradient ascent}:\\
 $\bbeta^{(t+1)}=\bbeta^{(t)}+\eta(y_{i_{t}}-\mu_{i_{t}}(\bbeta^{(t)}))\bx_{i_{t}}$ : $O(p)$/step\\
 \textbf{Newton-Raphson method}:\\
-$\bbeta^{(t+1)}=\bbeta^{(t)}-\inv{[\nabla_{\bbeta}^2\ell(\bbeta^{(t)})]}\nabla_{\bbeta}\ell(\bbeta^{(t)})$\\
+$\bbeta^{(t+1)}=\bbeta^{(t)}-\inv{[\nabla_{\bbeta}^2\ell(\bbeta^{(t)})]}\nabla_{\bbeta}\ell(\bbeta^{(t)})$
+\ruler
+\textbf{Prediction}
+$
+\hat{p}(y|\bx)=
+\begin{cases}
+    P(Y=1 |\bx),  & \text{if } y=1\\
+    P(Y=-1|\bx),  & \text{if } y=-1\\
+\end{cases}
+$\\
+\textbf{Log loss (Binomial Deviance)}:
+$\ell_\text{log}(\hat{p}(\cdot|\bx),y)=-\log(\hat{p}(y|\bx))$\\
+\textbf{Minimize}:
+$\frac{1}{n}\sum_{i=1}^{n}\log(1+\text{exp}(-y_i\tp{\bbeta}\bx_i))$
+% --------------------------------
 
 % \section{Linear Discriminant Analysis}
 % \section{Convex Optimization}
