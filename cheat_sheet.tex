@@ -165,6 +165,10 @@ plug in bayes rule expression.
 \ruler
 \textbf{Generative model}: $P(\bX, \bY) = P(\bY)P(\bX|\bY)$.\\
 Estimate $P(\bY)$ and $P(\bX|\bY)$, then use bayes theorem to calculate $P(\bY|\bX)$ and use discriminative model.
+\ruler
+\textbf{Gaussian} class conditional densities $P(\bX|Y=+1)$,$P(\bX|Y=-1)$ (with the same variance), the posterior probability is \textbf{logistic}:\\
+$P(Y=+1|\bx) = \frac{1}{1+\text{exp}(-\bx\cdot\bbeta-\beta_0)}$,\\
+$\bbeta = \inv{\Sigma}(\bmu_{1}-\bmu_{0})$, $\beta_0=\frac{\tp{\bmu_{0}}\inv{\Sigma}\bmu0-\bmu_{1}\inv{\Sigma}\bmu1}{2}+\log\frac{P(Y=1)}{P(Y=0)}$
 % --------------------------------
 
 \section{Estimation}
@@ -181,12 +185,13 @@ since it can change $\prod$ to $\sum$.
 \textbf{Penalized maximum likelihood}:
 Add a penalty term in the maximum (log) likelihood equation; treat the penalty term as some imaginary data points
 crafted for desired probability.
-\ruler
+% \ruler
 \textbf{Bayesian estimate}:
 Treat parameter as a random variable, then update based on observed value (data).\\
 Prior: $\pi(p) = 1$,\\
 Posterior: $P(p|\bX_1 = 1) = P(\bX_1 = 1|p)\pi(p) / \int P(X_1 = 1|q)d\pi(q)$
-\\\vspace{10pt}%\ruler
+% \\\vspace{10pt}
+\ruler
 \textbf{Maximum a posterior probability}: the mode of the posterior. If uniform prior, MAP is MLE; if not
 uniform prior, MAP is Penalized MLE.
 % --------------------------------
@@ -235,17 +240,17 @@ Given $\inR{\bX}{p}$, $Y \in \R$, consider linear(affine) prediction rules,\\
 $F_{\text{lin}} := \{ \bx \mapsto \tp{\bx}\bbeta + \beta_0 : \inR{\bbeta}{p}, \beta_0 \in \R \}$
 \subsection{Empirical risk minimization}
 \textbf{Empirical risk} is the sample average of squared error:\\
-$\hat{R}(f) = \hat{\E}_n \ell(f(\bX), Y) = \frac{1}{n}\sum_{i=1}{n}(f(\bX_i) - Y_i)^2$
-\ruler
+$\hat{R}(f) = \hat{\E}_n \ell(f(\bX), Y) = \frac{1}{n}\sum_{i=1}{n}(f(\bX_i) - Y_i)^2$\\
 Choose $\hat{f} := \text{arg } min_{f \in F_\text{lin}} \hat{\E}_n \ell(f(\bX), Y)$
-\ruler
+\\\vspace{100pt}
+% \ruler
 Find $\hat{f} : \bx \mapsto \tp{\bx}\hat{\bbeta}$, such that\\
 $
 \hat{\bbeta} = \text{arg } min_{\inR{\bbeta}{p}}\sum_{i=1}^{n}(\tp{\bX_i}\bbeta - Y_i)^2
              = \text{arg } min_{\inR{\bbeta}{p}}\underbrace{\norm{\bX\bbeta - \by}^2}_\text{RSS}
 $\\
 where \textbf{design matrix} $\inR{\bX}{n \times p}$ and \textbf{response vector} $\inR{\by}{n}$.
-\\\vspace{10pt}%\ruler
+\ruler
 \textbf{Normal equations}:
 $\tp{\bX}\bX\bbeta = \tp{\bX}\by \Rightarrow \hat{\bbeta} = \inv{(\tp{\bX}\bX)}\tp{\bX}\by$
 \ruler
@@ -295,7 +300,29 @@ Ridge regression is equivalent to a MAP estimate with a gaussian prior.
 Lasso regression is equivalent to a MAP estimate with a Laplace prior.
 % --------------------------------
 
-% \section{Logistic Regression}
+\section{Logistic Regression}
+Model \textbf{log odds} ($\log p/(1-p)$) as an affine function of $\bx$.
+\ruler
+$P(Y=1|\bx)=\frac{1}{1+\text{exp}(\tp{\bbeta}\bx)}$
+Given data $(\bX_1, Y_1),\dots,(\bX_n, Y_n) \in \R^{p} \times \{0,1\}$,
+estimate $\bbeta$ with maximum likelihood.
+\ruler
+\textbf{Log likelihood}:\\
+$\ell(\bbeta) = \sum_{i=1}^{n}y_i\log \mu_i(\bbeta)+(1-y_i)\log(1-\mu_i(\bbeta))$,\\
+where $\mu_i(\bbeta) = P(Y=1|\bX=\bx_i,\bbeta)=\frac{1}{1+\text{exp}(-\tp{\bbeta}\bx_i)}$
+\ruler
+$\nabla_{\bbeta}\mu_i(\bbeta) = \mu_i(\bbeta)(1-\mu_i(\bbeta))\bx_i$\\
+$\nabla_{\bbeta}\ell(\bbeta)=\sum_{i=1}^{n}(y_i-\mu_i(\bbeta))\bx_i = \tp{\bX}(\by-\bmu)$\\
+$\nabla_{\bbeta}^2\ell(\bbeta)=\sum_{i=1}^{n}-\mu_i(\bbeta)(1-\mu_i(\bbeta))\bx_i\tp{\bx}_i = -\tp{\bX}\text{diag}(\bmu(1-\bmu))\bX$
+$\hat{\bbeta}^{\text{ml}}$ solves: $\sum_{i=1}^{n}y_i\bx_i=\sum_{i=1}^{n}\mu_i{\bbeta}\bx_i$
+\ruler
+\textbf{Gradient ascent}:\\
+$\bbeta^{(t+1)}=\bbeta^{(t)}+\eta\nabla_{\bbeta}\ell(\bbeta^{(t)})$ : $O(np)$/step\\
+\textbf{Stochastic gradient ascent}:\\
+$\bbeta^{(t+1)}=\bbeta^{(t)}+\eta(y_{i_{t}}-\mu_{i_{t}}(\bbeta^{(t)}))\bx_{i_{t}}$ : $O(p)$/step\\
+\textbf{Newton-Raphson method}:\\
+$\bbeta^{(t+1)}=\bbeta^{(t)}-\inv{[\nabla_{\bbeta}^2\ell(\bbeta^{(t)})]}\nabla_{\bbeta}\ell(\bbeta^{(t)})$\\
+
 % \section{Linear Discriminant Analysis}
 % \section{Convex Optimization}
 \end{multicols*}
