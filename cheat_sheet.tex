@@ -28,12 +28,28 @@
 % Math character command.
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\E}{\mathbb{E}}
+
+\newcommand{\bb}{\mathbf{b}}
 \newcommand{\bx}{\mathbf{x}}
+\newcommand{\bv}{\mathbf{v}}
+
+\newcommand{\bA}{\mathbf{A}}
+\newcommand{\bI}{\mathbf{I}}
 \newcommand{\bX}{\mathbf{X}}
 \newcommand{\bY}{\mathbf{Y}}
+\newcommand{\bZ}{\mathbf{Z}}
+
 \newcommand{\btheta}{\boldsymbol{\theta}}
-\newcommand{\ruler}{\\\rule{\columnwidth}{0.25pt}\\}
+\newcommand{\bmu}{\boldsymbol{\mu}}
+\newcommand{\bSigma}{\boldsymbol{\Sigma}}
+\newcommand{\bLambda}{\boldsymbol{\Lambda}}
+
+\newcommand{\tp}[1]{#1^{T}}
+\newcommand{\inv}[1]{#1^{-1}}
 \newcommand{\norm}[1]{\|#1\|}
+\newcommand{\gaussian}[2]{\mathcal{N}(#1, #2)}
+
+\newcommand{\ruler}{\\\rule{\columnwidth}{0.25pt}\\}
 
 % -----------------------------------------------------------------------
 \begin{document}
@@ -170,11 +186,40 @@ uniform prior, MAP is Penalized MLE.
 \\%\ruler
 \textbf{Gaussian maximum likelihood estimation}:\\
 $\mu = \frac{1}{n}\sum_{i=1}^{n}x_i$, $\sigma^2 = \frac{1}{n}\sum_{i=1}^{n}(x_i - \mu)^2$
-% \section{Gaussian}
+% --------------------------------
+
+\section{Multivariate Normal Distribution}
+$\bx \in \R^d: p(x) = \frac{1}{(2\pi)^{d/2}|\bSigma|^{1/2}}e^{(-\frac{1}{2}\tp{(\bx-\bmu)}\inv{\bSigma}(\bx-\bmu))}$
+\ruler
+\textbf{Covariance matrix}:
+$\bSigma = \E(\bX - \bmu)\tp{(\bX - \bmu)}$\\
+Symmetric: $\bSigma_{i,j} = \bSigma_{j_i}$\\
+Non-negative diagonal entries: $\bSigma{i,i} \geq 0$\\
+Positive semidefinite: $\forall \bv \in \R^d, \tp{\bv}\bSigma\bv \geq 0$
+\ruler
+\textbf{Spectral Theorem} for \textbf{non-diagonal covariance}:\\
+$U = [\bv_1, \bv_2, \dots, \bv_n], \bLambda = \text{diag}(\tp{[\lambda_1, \lambda_2, \dots, \lambda_n]})$\\
+We can eigen decompose $\inv{\bSigma} = U\inv{\bLambda}\tp{U}$, this is like to change to a different eigen spaces, where covariances ($\bLambda$) diagonal axis-alianed.
+\ruler
+Assume independent,
+$ \gaussian{\bmu_x}{\bSigma} + \gaussian{\bmu_y}{\bSigma_y} = \gaussian{\bmu_x+\bmu_y}{\bSigma_x+\bSigma_y}$
+\ruler
+Given a $d$-dimensaional Gaussian $\bX \sim \gaussian{\bmu}{\bSigma}$,\\
+write $\bX = \left[ \begin{smallmatrix} \bY \\ \bZ \end{smallmatrix} \right]$,
+$\bmu = \left[ \begin{smallmatrix} \bmu_\bY \\ \bmu_\bZ \end{smallmatrix} \right]$,
+$\bSigma = \left[ \begin{smallmatrix} \bSigma_{\bY\bY} & \bSigma_{\bY\bZ} \\ \bSigma_{\bZ\bY} & \bSigma_{\bZ\bZ} \end{smallmatrix} \right]$,\\
+where $\bY \in \R^m$, and $\bZ \in \R^{d-m}$. Then $\bY \sim \gaussian{\mu_\bY}{\bSigma_{\bY\bY}}$
+\ruler
+Given a $d$-dimensaional Gaussian $\bX \sim \gaussian{\bmu}{\bSigma}$,\\
+matrix $\bA \in \R^{m\times d}$ and vector $\bb \in \R^m$, define $\bY = \bA\bX + \bb$.\\
+Then $\bY \sim \gaussian{\bA\bmu + \bb}{\bA\bSigma\tp{\bA}}$
+\ruler
+Given a $d$-dimensaional Gaussian $\bX \sim \gaussian{\bmu}{\bSigma}$,\\
+with $\bSigma$ positive definite,\\
+$\bY = \bSigma^{-\frac{1}{2}}(\bX-\bmu) \sim \gaussian{\mathbf{0}, \bI}$
 % \section{Regression Regularization}
 % \section{Logistic Regression}
 % \section{Linear Discriminant Analysis}
 % \section{Convex Optimization}
-
 \end{multicols*}
 \end{document}
