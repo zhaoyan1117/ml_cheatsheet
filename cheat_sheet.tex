@@ -36,6 +36,7 @@
 \newcommand{\bB}{\mathbf{B}}
 \newcommand{\bH}{\mathbf{H}}
 \newcommand{\bI}{\mathbf{I}}
+\newcommand{\bJ}{\mathbf{J}}
 \newcommand{\bX}{\mathbf{X}}
 \newcommand{\bY}{\mathbf{Y}}
 \newcommand{\bZ}{\mathbf{Z}}
@@ -78,10 +79,10 @@ $P(Y=\pm 1 | X) = \frac{P(X|Y=\pm 1)P(Y=\pm 1)}{P(X|Y= +1)P(Y= +1) + P(X|Y= -1)P
 $
 f(\bx) = \bA\bx + \tp{\bx}\bA + \tp{\bx}\bx + \tp{\bx}\bA\bx \Rightarrow
 \frac{df(\bx)}{d\bx} = \tp{\bA} + \bA + 2\bx + \bA\bx + \tp{\bA}\bx
-$
-\ruler
+$\\
 $\bH_{i,j}=\frac{\partial^2 f}{\partial x_i \partial x_j}$;
-$\nabla_{x}(a\bx) = a\bI$
+$\nabla_{x}(a\bx) = a\bI$;
+$\bJ = |\frac{\partial \bx}{\partial \by}| \Leftrightarrow \inv{\bJ} = |\frac{\partial \by}{\partial \bx}|$
 % --------------------------------
 
 \section{Perceptron}
