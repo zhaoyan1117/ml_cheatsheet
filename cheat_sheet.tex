@@ -73,6 +73,10 @@
 \section{Probability}
 \textbf{Bayes Theorem}:\\
 $P(Y=\pm 1 | X) = \frac{P(X|Y=\pm 1)P(Y=\pm 1)}{P(X|Y= +1)P(Y= +1) + P(X|Y= -1)P(Y= -1)}$
+\ruler
+$\bX$ and $\bY$ are \textbf{independent} iff $P(\bX,\bY)=P(\bX)P(\bY)$\\
+$\bX$ and $\bY$ are \textbf{uncorrelated} iff $\E(\bX,\bY)=\E(\bX)\E(\bY)$\\
+
 % --------------------------------
 
 \section{Matrix calculus}
@@ -131,10 +135,9 @@ Small C: focus on large margin, less tendency to overfit.
 Overfitting increases with: less data, more features.
 \ruler
 $\btheta = \sum_{j}\alpha_j y_j\bx_j$, $\alpha_j \neq 0$ only for support vectors.
-\ruler
-\textbf{Width} of the margin is $\frac{2}{\norm{\overrightarrow{\btheta}}}$.
 \columnbreak\\
-% \ruler
+\textbf{Width} of the margin is $\frac{2}{\norm{\overrightarrow{\btheta}}}$.
+\ruler
 $K(\bx_i, \bx_j) = \phi(\bx_i)\cdot\phi(\bx_j)$, K is called a kernel.\\
 Solve $\alpha_j$ to determine $\sum_j\alpha_j y_j\phi(\bx_j)$.\\
 Compute the classifier for a test point $\bx$ via $\btheta\cdot\phi(\bx) = \sum_{j}\alpha_j y_j K(\bx_j, \bx)$
