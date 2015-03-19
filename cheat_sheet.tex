@@ -143,12 +143,15 @@ Solve $\alpha_j$ to determine $\sum_j\alpha_j y_j\phi(\bx_j)$.\\
 Compute the classifier for a test point $\bx$ via $\btheta\cdot\phi(\bx) = \sum_{j}\alpha_j y_j K(\bx_j, \bx)$
 \ruler
 degree-m polynomial kernel: $K_m(\bx, \tilde{\bx}) = (1+\bx\cdot\tilde{\bx})^m$\\
-radial basis function kernel: $K_{rbf}(\bx, \tilde{\bx}) = \text{exp}(-\gamma\norm{\bx-\tilde{\bx}}^2)$
+RBF kernel (infinite dimention): $K_{rbf}(\bx, \tilde{\bx}) = \text{exp}(-\gamma\norm{\bx-\tilde{\bx}}^2)$
 % --------------------------------
 
 \section{Decision Theory}
 \textbf{Loss function}: $l : \mathcal{Y} \times \mathcal{Y} \rightarrow \R$,
 and $l(\hat{y}, y)$ is the cost of predicting $\hat{y}$ when the outcome is $y$.
+\ruler
+\textbf{Risk for a given class}:
+$R(\alpha_i|x) = \sum_{i=1}^{C}\lambda_{ij}P(w=j|x)$
 \ruler
 Assume $(\bX, \bY)$ are chosen i.i.d according to some probability distribution on $\mathcal{X}\times\mathcal{Y}$.
 \textbf{Risk} is misclassification probability: $R(f) = \E l(f(\bX), \bY) = Pr(f(\bX) \neq \bY)$
