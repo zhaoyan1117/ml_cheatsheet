@@ -75,7 +75,7 @@ $P(Y=\pm 1 | X) = \frac{P(X|Y=\pm 1)P(Y=\pm 1)}{P(X|Y= +1)P(Y= +1) + P(X|Y= -1)P
 % --------------------------------
 
 \section{Matrix calculus}
-$f(\bx) = \tp{\bx}\bA\bB + \bA\bB\bx + \tp{\bx}\bA\bB\bx \Leftrightarrow \frac{df(\bx)}{d\bx} = \bA\bB + \bA\bB + 2\bA\bB\bx$
+$f(\bx) = \tp{\bx}\bA + \bA\bx + \tp{\bx}\bA\bx \Rightarrow \frac{df(\bx)}{d\bx} = \bA + \bA + 2\bA\bx$
 \ruler
 $\bH_{i,j}=\frac{\partial^2 f}{\partial x_i \partial x_j}$;
 $\nabla_{x}(a\bx) = a\bI$
@@ -366,6 +366,7 @@ $\underbrace{p^*=\min_{x}\max_{\lambda\geq0}L(x,\lambda)}_\text{primal}\geq\unde
 \textbf{Strong duality}: \\
 if there is a saddle point $(x^*, \lambda^*)$ such that for all $x$ and $\lambda\geq0$,
 $L(x^*,\lambda)\leq L(x^*,\lambda^*)\leq L(x,\lambda^*)$, then primal and dual have the same value ($p^* = d^*$).
+\ruler
 \textbf{Karush-Kuhn-Tucker optimality conditions}:\\
 Primal feasibility: $f_i(x)\leq0$; Dual feasibility: $\lambda_i\geq0$\\
 Complementary slackness: $\lambda_i f_i(x)=0$\\
