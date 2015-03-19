@@ -75,7 +75,10 @@ $P(Y=\pm 1 | X) = \frac{P(X|Y=\pm 1)P(Y=\pm 1)}{P(X|Y= +1)P(Y= +1) + P(X|Y= -1)P
 % --------------------------------
 
 \section{Matrix calculus}
-$f(\bx) = \tp{\bx}\bA + \bA\bx + \tp{\bx}\bA\bx \Rightarrow \frac{df(\bx)}{d\bx} = \bA + \bA + 2\bA\bx$
+$
+f(\bx) = \bA\bx + \tp{\bx}\bA + \tp{\bx}\bx + \tp{\bx}\bA\bx \Rightarrow
+\frac{df(\bx)}{d\bx} = \tp{\bA} + \bA + 2\bx + \bA\bx + \tp{\bA}\bx
+$
 \ruler
 $\bH_{i,j}=\frac{\partial^2 f}{\partial x_i \partial x_j}$;
 $\nabla_{x}(a\bx) = a\bI$
