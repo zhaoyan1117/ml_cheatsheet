@@ -372,6 +372,15 @@ $L(\btheta,\xi,\alpha,\lambda) = \frac{1}{2}\norm{\btheta}^2 + \frac{C}{n}\sum_{
 \ruler
 \textbf{Soft margein SVM dual problem}:
 $\min_{\balpha} \frac{1}{2}\tp{\balpha}\diag(\by)\mathbf{K}\diag(\by)\balpha - \tp{\balpha}\mathbf{1}$, s.t. $\mathbf{0}\leq\balpha\leq\frac{C}{n}$.
+% --------------------------------
+
+\section{K-Nearest Neighbors}
+Given $\bx_q$, take vote among its k nearest neighbors, or take mean of $f$ values of k nearest neighbors if real-values.
+$\hat{f}(\bx_q) \leftarrow \frac{1}{k} \sum_{i=1}^{k} f(\bx_i)$
+\ruler
+\textbf{Distance metrics:}\\
+p-norm: $\norm{\bz}_p = (\sum_{i=1}^{d}|z_i|^p)^{1/p}$
+% --------------------------------
 
 \end{multicols*}
 \end{document}
