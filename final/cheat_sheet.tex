@@ -24,8 +24,11 @@
 \setlength{\parskip}{0pt}
 
 \input{math_commands.tex}
-
 \newcommand{\ruler}{\\\rule{\columnwidth}{0.25pt}\\}
+
+% For neural net.
+\newcommand{\la}[2]{#1^{(#2)}}
+\newcommand{\nbs}{n^{bs}}
 
 % -----------------------------------------------------------------------
 \begin{document}
@@ -380,7 +383,60 @@ $\hat{f}(\bx_q) \leftarrow \frac{1}{k} \sum_{i=1}^{k} f(\bx_i)$
 \ruler
 \textbf{Distance metrics:}\\
 p-norm: $\norm{\bz}_p = (\sum_{i=1}^{d}|z_i|^p)^{1/p}$
+\ruler
+\textbf{K-d tree} for space partitioning, need backtracking to find real neighbors.
 % --------------------------------
 
+\section{Decision Tree}
+\textbf{Entropy}: $H = \sum_{i} - p_i\log_{2}p_i$
+\ruler
+\textbf{AdaBoost}:\\
+weights update: $\alpha_t = \frac{1}{2}\ln \frac{1-\epsilon_t}{\epsilon_t}$\\
+distribution update: $D_{t+1}(i)=\frac{D_{t}(i)}{Z_t} \times
+\begin{cases}
+    e^{-\alpha_t},  & \text{if } h_t{x_i} = y_i\\
+    e^{\alpha_t},   & \text{if } h_t{x_i} \neq y_i
+\end{cases}
+$
+% --------------------------------
+
+\section{Neural Net}
+\textbf{Forward}:
+$\la{\bz}{i} = \la{\ba}{i-1}\la{\bW}{i-1}, \la{\ba}{i} = \la{f}{i}(\la{\bz}{i})$
+\ruler
+\textbf{Backward MSE}:\\
+$
+\pfrac{J_{MSE}}{\la{\bW}{i}} = \la{\bdelta}{i+1}\pfrac{\la{\bz}{i+1}}{\la{\bW}{i}}
+                             = \tp{(\la{\ba}{i})}\la{\bdelta}{i+1},
+$
+$
+\la{\bdelta}{i+1} = \frac{1}{\nbs}(\la{\ba}{out}-\by)\odot
+                    \dfi{out}(\la{\bz}{out})\tp{(\la{\bW}{out-1})}
+                    \cdots
+                    \tp{(\la{\bW}{i+1})}
+                    \odot\dfi{i+1}(\la{\bz}{i+1})
+$
+\ruler
+\textbf{Backward CEE}:\\
+$
+\pfrac{J_{CEE}}{\la{\bW}{i}} = \la{\bdelta}{i+1}\pfrac{\la{\bz}{i+1}}{\la{\bW}{i}}
+                             = \tp{(\la{\ba}{i})}\la{\bdelta}{i+1}
+$
+$
+\la{\bdelta}{i+1} = \frac{1}{\nbs}
+                    [(\la{\ba}{out}-\by)\oslash(\bhy\odot(1-\la{\ba}{out}))]
+                    \odot
+                    \dfi{out}(\la{\bz}{out})\tp{(\la{\bW}{out-1})}
+                    \cdots
+                    \tp{(\la{\bW}{i+1})}
+                    \odot\dfi{i+1}(\la{\bz}{i+1})
+$
+% --------------------------------
+
+\section{Clustering}
+$C_i = \text{argmin}_{k}\norm{\bx_i-\bmu_k}^2$\\
+$\bmu_k = \frac{\sum_{C_i=k}\bx_i}{\sum{C_i=k}1}$
 \end{multicols*}
+% --------------------------------
+
 \end{document}
