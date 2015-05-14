@@ -271,8 +271,6 @@ $P(\bbeta|\bX_1, Y_1,\dots,\bX_n,Y_n) \propto exp(-\frac{1}{2}(\sum_{i=1}^{n}\fr
 % --------------------------------
 
 \section{Linear Regression Regularization}
-\textbf{Trading off bias and variance}: some increase in bias can give a big decrease in variance.
-\ruler
 \textbf{Subset selection} is like $L0$ regularization:
 RSS decreases as the complexity increases because the best fit with a smaller subset is always possible with a larger subset.
 \ruler
@@ -284,8 +282,8 @@ $\hat{\bbeta}^{\text{ridge}}=\inv{(\tp{\bX}\bX+\lambda\bI)}\tp{\bx}\by$
 \ruler
 \textbf{Lasso regression} is like $L1$ regularization:
 $\hat{\bbeta} = \text{arg }\min_{\bbeta}(\sum_{i=1}^n(y_i-\tp{\bx}_i\bbeta)^2 + \lambda\sum_{j=1}{p}|\beta_j|)$
-% \ruler
-\columnbreak\\
+\ruler
+% \columnbreak\\
 While ridge regression leads to reduced, but non-zero values of the coefficients,
 Lasso regression forces some coefficients to be zero.
 \ruler
@@ -349,8 +347,8 @@ such that $L(x,\lambda)=f_0(x)+\sum_{i=1}^{m}\lambda_{i}f_{i}(x)$.
 \ruler
 \textbf{Weak duality}:
 $\underbrace{p^*=\min_{x}\max_{\lambda\geq0}L(x,\lambda)}_\text{primal}\geq\underbrace{\max_{\lambda\geq0}\min_{x}L(x,\lambda)=d^*}_\text{dual}$
-% \ruler
-\columnbreak\\
+\ruler
+% \columnbreak\\
 \textbf{Strong duality}: \\
 if there is a saddle point $(x^*, \lambda^*)$ such that for all $x$ and $\lambda\geq0$,
 $L(x^*,\lambda)\leq L(x^*,\lambda^*)\leq L(x,\lambda^*)$, then primal and dual have the same value ($p^* = d^*$).
