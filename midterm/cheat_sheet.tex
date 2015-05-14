@@ -1,0 +1,377 @@
+\documentclass[10pt,landscape]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage[landscape]{geometry}
+\usepackage{amsmath,amsthm,amsfonts,amssymb,relsize}
+\usepackage{color,graphicx,overpic}
+
+% Turn off header and footer
+\pagestyle{empty}
+\geometry{top=.25in,left=.25in,right=.25in,bottom=.25in}
+
+% Redefine section commands to use less space
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{\z@}{3ex}{2ex}
+                       {\normalfont\normalsize\bfseries\textit}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{\z@}{2ex}{0.5ex}
+                          {\normalfont\small\bfseries}}
+\makeatother
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+
+\input{math_commands.tex}
+
+\newcommand{\ruler}{\\\rule{\columnwidth}{0.25pt}\\}
+
+% -----------------------------------------------------------------------
+\begin{document}
+\raggedright
+\footnotesize
+\begin{multicols*}{3}
+% multicol parameters
+% These lengths are set only within the two main columns
+% \setlength{\columnseprule}{0.1pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{0pt}
+
+\section{Probability}
+\textbf{Bayes Theorem}:\\
+$P(Y=\pm 1 | X) = \frac{P(X|Y=\pm 1)P(Y=\pm 1)}{P(X|Y= +1)P(Y= +1) + P(X|Y= -1)P(Y= -1)}$
+\ruler
+$\bX$ and $\bY$ are \textbf{independent} iff $P(\bX,\bY)=P(\bX)P(\bY)$\\
+$\bX$ and $\bY$ are \textbf{uncorrelated} iff $\E(\bX,\bY)=\E(\bX)\E(\bY)$\\
+
+% --------------------------------
+
+\section{Matrix calculus}
+$
+f(\bx) = \bA\bx + \tp{\bx}\bA + \tp{\bx}\bx + \tp{\bx}\bA\bx \Rightarrow
+\frac{df(\bx)}{d\bx} = \tp{\bA} + \bA + 2\bx + \bA\bx + \tp{\bA}\bx
+$\\
+$\bH_{i,j}=\frac{\partial^2 f}{\partial x_i \partial x_j}$;
+$\nabla_{x}(a\bx) = a\bI$;
+$\bJ = |\frac{\partial \bx}{\partial \by}| \Leftrightarrow \inv{\bJ} = |\frac{\partial \by}{\partial \bx}|$
+% --------------------------------
+
+\section{Perceptron}
+$f(\bx) = \btheta \cdot \bx + \theta_0 = \sum_{i=1}^{d}\theta_ix_i + \theta_0$,
+$
+\hat{y} =
+\begin{cases}
+    1,  & \text{if } f(x)\geq 0\\
+    -1, & \text{if } f(x) < 0
+\end{cases}
+$
+\ruler
+\textbf{Decision boundary}, a \textbf{hyperplane} in $\R^d$: $H = \{\inR{\bx}{d} : f(\bx) = 0\} = \{\inR{\bx}{d} : \btheta \cdot \bx + \theta_0 = 0\}$
+\ruler
+$\btheta$ is the \textbf{normal} of the hyperplane,\\
+$\theta_0$ is the \textbf{offset} of the hyperplane from origin,\\
+$-\frac{\theta_0}{\norm{\btheta}}$ is the \textbf{signed distance} from the origin to hyperplane.
+\ruler
+\textbf{Perceptron algorithm},\\
+Input: $(\bx_1, y_1),\dots,(\bx_n, y_n) \in \R^{d} \times \{\pm 1\}$\\
+while some $y_i \neq \text{sign}(\btheta \cdot \bx_i)$\\
+\-\hspace{0.5cm} pick some misclassified $(\bx_i, y_i)$\\
+\-\hspace{0.5cm} $\btheta \leftarrow \btheta + y_i\bx_i$
+\ruler
+Given a \textbf{linearly separable data}, perceptron algorithm will take no more than $\frac{R^2}{\gamma^2}$ updates to \textbf{converge},
+where $R = \max_{i}{\norm{\bx_i}}$ is the radius of the data, $\gamma = \min_{i}{\frac{y_i(\btheta\cdot\bx_i)}{\norm{\btheta}}}$ is the margin.\\
+Also, $\frac{\btheta\cdot\bx}{\norm{\btheta}}$ is the signed distance from H to $\bx$ in the direction $\btheta$.
+\ruler
+$\btheta = \sum_{i} \alpha_i y_i \bx_i$, thus any inner product space will work, this is a \textbf{kernel}.
+\ruler
+\textbf{Gradient descent} view of perceptron, minimize margin cost function
+$J(\btheta) = \sum_{i}(-y_i(\btheta\cdot\bx_i))_{+}$ with $\btheta \leftarrow \btheta - \eta\nabla J(\btheta)$
+% --------------------------------
+
+\section{Support Vector Machine}
+\textbf{Hard margin SVM},\\
+$\min_{\btheta} \norm{\btheta}^2$, such that $y_i\btheta\cdot\bx_i \geq 1 (i = 1,\dots,n)$\\
+\textbf{Soft margin SVM},\\
+$\min_{\btheta} \norm{\btheta}^2 + C\sum_{i=1}^{n}(1-y_i\btheta\cdot\bx_i)_+$
+\ruler
+\textbf{Regularization and SVMs}:
+Simulated data with many features $\phi(\bx)$;
+C controls trade-off between margin $1/\norm{\btheta}$ and fit to data;
+Large C: focus on fit to data (small margin is ok). More overfitting.
+Small C: focus on large margin, less tendency to overfit.
+Overfitting increases with: less data, more features.
+\ruler
+$\btheta = \sum_{j}\alpha_j y_j\bx_j$, $\alpha_j \neq 0$ only for support vectors.
+\columnbreak\\
+\textbf{Width} of the margin is $\frac{2}{\norm{\overrightarrow{\btheta}}}$.
+\ruler
+$K(\bx_i, \bx_j) = \phi(\bx_i)\cdot\phi(\bx_j)$, K is called a kernel.\\
+Solve $\alpha_j$ to determine $\sum_j\alpha_j y_j\phi(\bx_j)$.\\
+Compute the classifier for a test point $\bx$ via $\btheta\cdot\phi(\bx) = \sum_{j}\alpha_j y_j K(\bx_j, \bx)$
+\ruler
+degree-m polynomial kernel: $K_m(\bx, \tilde{\bx}) = (1+\bx\cdot\tilde{\bx})^m$\\
+RBF kernel (infinite dimention): $K_{rbf}(\bx, \tilde{\bx}) = \text{exp}(-\gamma\norm{\bx-\tilde{\bx}}^2)$
+% --------------------------------
+
+\section{Decision Theory}
+\textbf{Loss function}: $l : \mathcal{Y} \times \mathcal{Y} \rightarrow \R$,
+and $l(\hat{y}, y)$ is the cost of predicting $\hat{y}$ when the outcome is $y$.
+\ruler
+\textbf{Risk for a given class}:
+$R(\alpha_i|x) = \sum_{i=1}^{C}\lambda_{ij}P(w=j|x)$
+\ruler
+Assume $(\bX, \bY)$ are chosen i.i.d according to some probability distribution on $\mathcal{X}\times\mathcal{Y}$.
+\textbf{Risk} is misclassification probability: $R(f) = \E l(f(\bX), \bY) = Pr(f(\bX) \neq \bY)$
+\ruler
+\textbf{Bayes Decision Rule} is
+$
+f^{*}(x) =
+\begin{cases}
+    1,  & \text{if } P(\bY=1|x) > P(\bY=-1|x) \\
+    -1, & \text{otherwise. }
+\end{cases}
+$,\\
+and the optimal risk (Bayes risk) $R^{*} = \inf_{f}R(f)=R(f^*)$
+\ruler
+\textbf{Excess risk} is for any $f: \mathcal{X} \rightarrow \{-1, +1\}$,\\
+$R(f) - R^* = \E (1[f(x)\neq f^*(x)]|2P(\bY=+1|\bX) - 1|)$
+\ruler
+\textbf{Risk in Regression} is expected  squared error:
+$R(f) = \E l(f(\bX), \bY) = \E \E [f(\bX) - \bY^2 | \bX]$
+\ruler
+\textbf{Bias-variance decomposition}:
+$R(f) = \E[\underbrace{(f(\bX) - \E[\bY|\bX])^2}_{\text{bias}^2}] + \E[\underbrace{(\E[\bY|\bX]-\bY)^2}_{\text{variance}}]$\\
+$R(f) = \E[(f(\bX) - f^*(\bX))^2] + \E[(f^*(\bX)-\bY)^2]$\\
+$R(f) = \E[(f(\bX) - f^*(\bX))^2] + R(f*)$\\
+$R(f) - R(f*) = \E[(f(\bX) - f^*(\bX))^2]$, $f^*(\bX) = \E[\bY|\bX]$\\
+% --------------------------------
+
+\section{Generative and Discriminative}
+\textbf{Discriminative models}: $P(\bX, \bY) = P(\bX)P(\bY|\bX)$.\\
+Estimate $P(\bY|\bX)$, then pretend out estimate $\hat{P}(\bY|\bX)$ is the actual $P(\bY|\bX)$ and
+plug in bayes rule expression.
+\ruler
+\textbf{Generative model}: $P(\bX, \bY) = P(\bY)P(\bX|\bY)$.\\
+Estimate $P(\bY)$ and $P(\bX|\bY)$, then use bayes theorem to calculate $P(\bY|\bX)$ and use discriminative model.
+\ruler
+\textbf{Gaussian} class conditional densities $P(\bX|Y=+1)$,$P(\bX|Y=-1)$ (with the same variance), the posterior probability is \textbf{logistic}:\\
+$P(Y=+1|\bx) = \frac{1}{1+\text{exp}(-\bx\cdot\bbeta-\beta_0)}$,\\
+$\bbeta = \inv{\Sigma}(\bmu_{1}-\bmu_{0})$, $\beta_0=\frac{\tp{\bmu_{0}}\inv{\Sigma}\bmu0-\bmu_{1}\inv{\Sigma}\bmu1}{2}+\log\frac{P(Y=1)}{P(Y=0)}$
+% --------------------------------
+
+\section{Estimation}
+\textbf{Method of moments}:
+Match moments of the distribution to momemnts measured in the data.
+% \ruler
+\columnbreak\\
+\textbf{Maximum likelihood}:
+Choose parameter so that the distribution it defines gives the obverved data the highest probability (likelihood).
+\ruler
+\textbf{Maximum log likelihood}:
+Log of maximum likelihood, equilvalent to maximum likelihood since log is monotonically increase; it is useful
+since it can change $\prod$ to $\sum$.
+\ruler
+\textbf{Penalized maximum likelihood}:
+Add a penalty term in the maximum (log) likelihood equation; treat the penalty term as some imaginary data points
+crafted for desired probability.
+\ruler
+\textbf{Bayesian estimate}:
+Treat parameter as a random variable, then update based on observed value (data).\\
+Prior: $\pi(p) = 1$,\\
+Posterior: $P(p|\bX_1 = 1) = P(\bX_1 = 1|p)\pi(p) / \int P(X_1 = 1|q)d\pi(q)$
+\ruler
+\textbf{Maximum a posterior probability}: the mode of the posterior. If uniform prior, MAP is MLE; if not
+uniform prior, MAP is Penalized MLE.
+% --------------------------------
+
+\section{Multivariate Normal Distribution}
+$\inR{\bx}{d}: p(x) = \frac{1}{(2\pi)^{d/2}|\bSigma|^{1/2}}e^{(-\frac{1}{2}\tp{(\bx-\bmu)}\inv{\bSigma}(\bx-\bmu))}$
+\ruler
+\textbf{Covariance matrix}:
+$\bSigma = \E(\bX - \bmu)\tp{(\bX - \bmu)}$\\
+Symmetric: $\bSigma_{i,j} = \bSigma_{j_i}$\\
+Non-negative diagonal entries: $\bSigma{i,i} \geq 0$\\
+Positive semidefinite: $\forall \inR{\bv}{d}, \tp{\bv}\bSigma\bv \geq 0$
+\ruler
+\textbf{Super-level} sets of pdf:
+$\bxi_r = \left\{ \inR{\bx}{d} : \tp{(\bx - \bmu)}\inv{\bSigma}(\bx-\bmu)\leq r^2 \right\}$.\\
+$\text{Volume of } \bxi_r \propto \prod^{d}_{i=1}\sigma_i = \sqrt{|\bSigma|}$
+\ruler
+\textbf{Spectral Theorem} for \textbf{non-diagonal covariance}:\\
+$U = [\bv_1, \bv_2, \dots, \bv_n], \bLambda = \diag(\tp{[\lambda_1, \lambda_2, \dots, \lambda_n]})$\\
+We can eigen decompose $\inv{\bSigma} = U\inv{\bLambda}\tp{U}$, this is like to change to a different eigen spaces, where covariances ($\bLambda$) diagonal axis-alianed.
+\ruler
+Assume independent,
+$ \gaussian{\bmu_x}{\bSigma} + \gaussian{\bmu_y}{\bSigma_y} = \gaussian{\bmu_x+\bmu_y}{\bSigma_x+\bSigma_y}$
+\ruler
+Given a $d$-dimensaional Gaussian $\bX \sim \gaussian{\bmu}{\bSigma}$,\\
+write $\bX = \left[ \begin{smallmatrix} \bY \\ \bZ \end{smallmatrix} \right]$,
+$\bmu = \left[ \begin{smallmatrix} \bmu_\bY \\ \bmu_\bZ \end{smallmatrix} \right]$,
+$\bSigma = \left[ \begin{smallmatrix} \bSigma_{\bY\bY} & \bSigma_{\bY\bZ} \\ \bSigma_{\bZ\bY} & \bSigma_{\bZ\bZ} \end{smallmatrix} \right]$,\\
+where $\inR{\bY}{m}$, and $\inR{\bZ}{d-m}$. Then $\bY \sim \gaussian{\mu_\bY}{\bSigma_{\bY\bY}}$
+\ruler
+Given a $d$-dimensaional Gaussian $\bX \sim \gaussian{\bmu}{\bSigma}$,\\
+matrix $\inR{\bA}{m\times d}$ and vector $\inR{\bb}{m}$, define $\bY = \bA\bX + \bb$.\\
+Then $\bY \sim \gaussian{\bA\bmu + \bb}{\bA\bSigma\tp{\bA}}$
+\ruler
+Given a $d$-dimensaional Gaussian $\bX \sim \gaussian{\bmu}{\bSigma}$,\\
+with $\bSigma$ positive definite,\\
+$\bY = \bSigma^{-\frac{1}{2}}(\bX-\bmu) \sim \gaussian{\mathbf{0}, \bI}$
+\ruler
+\textbf{Gaussian maximum likelihood estimation}:\\
+Sample mean: $\hat{\bmu} = \frac{1}{n}\sum_{i=1}^{n}\bx_i$;\\
+Sample covariance: $\hat{\bSigma} = \frac{1}{n}\sum_{i=1}^{n}(\bx_i - \hat{\bmu})\tp{(\bx_i - \hat{\bmu})}$
+% --------------------------------
+
+\section{Linear Regression}
+Given $\inR{\bX}{p}$, $Y \in \R$, consider linear(affine) prediction rules,\\
+$F_{\text{lin}} := \{ \bx \mapsto \tp{\bx}\bbeta + \beta_0 : \inR{\bbeta}{p}, \beta_0 \in \R \}$
+\subsection{Empirical risk minimization}
+\textbf{Empirical risk} is the sample average of squared error:\\
+$\hat{R}(f) = \hat{\E}_n \ell(f(\bX), Y) = \frac{1}{n}\sum_{i=1}{n}(f(\bX_i) - Y_i)^2$\\
+Choose $\hat{f} := \text{arg } min_{f \in F_\text{lin}} \hat{\E}_n \ell(f(\bX), Y)$
+\ruler
+Find $\hat{f} : \bx \mapsto \tp{\bx}\hat{\bbeta}$, such that\\
+$
+\hat{\bbeta} = \text{arg } min_{\inR{\bbeta}{p}}\sum_{i=1}^{n}(\tp{\bX_i}\bbeta - Y_i)^2
+             = \text{arg } min_{\inR{\bbeta}{p}}\underbrace{\norm{\bX\bbeta - \by}^2}_\text{RSS}
+$\\
+where \textbf{design matrix} $\inR{\bX}{n \times p}$ and \textbf{response vector} $\inR{\by}{n}$.
+\ruler
+\textbf{Normal equations}:
+$\tp{\bX}\bX\bbeta = \tp{\bX}\by \Rightarrow \hat{\bbeta} = \inv{(\tp{\bX}\bX)}\tp{\bX}\by$
+\ruler
+\textbf{Projection Theorem} also leads to normal equations:\\
+$\inv{(\by-\hat{\by})}\bX = 0 \Leftrightarrow \tp{\bX}(\by-\bX\bbeta) = 0 \Leftrightarrow \tp{\bX}\by=\tp{\bX}\bX\bbeta$
+\subsection{Linear model with additive Gaussian noise}
+Model the conditional distribution of $Y$ given $\bX = \bx$ as:
+$P(Y|\bX=\bx) = \gaussian{\tp{\bx}\bbeta}{\sigma^2}$\\
+Equivalently: $Y = \tp{\bx}\bbeta + \epsilon$, where $\epsilon \sim \gaussian{\mathbf{0}}{\sigma^2}$
+\ruler
+\textbf{Maximum likelihood} is least square:\\
+$
+L(\bbeta) = \prod_{i=1}^{n}p(Y_i|\bX_i,\bbeta) \Leftrightarrow
+\ell(\bbeta) = g(\sigma^2)-\frac{1}{2\sigma^2}\sum_{i=1}^{n}(y_i-\tp{\bX}\bbeta)^2
+$
+\ruler
+Fix $\bX$. Provided $\E\by=\bX\bbeta$ and $\text{Cov}(\by)=\sigma^2\bI$
+\ruler
+\textbf{Bayesian analysis}:
+Treat $\bbeta$ as a r.v. with prior distribution $\gaussian{\mathbf{0}}{\tau^2\bI}$,
+then compute posterior distribution $P(\bbeta|\bX, Y)$.
+\ruler
+$P(\bbeta|\bX_1, Y_1,\dots,\bX_n,Y_n) \propto P(Y_1,\dots,Y_n|\bbeta,\bX_1,\dots,\bX_n)P(\bbeta)$\\
+$P(\bbeta|\bX_1, Y_1,\dots,\bX_n,Y_n) \propto exp(-\frac{1}{2}(\sum_{i=1}^{n}\frac{(Y_i-\tp{\bX}_i\bbeta)^2}{\sigma^2}+\frac{1}{\tau^2}\norm{\bbeta}^2))$
+% --------------------------------
+
+\section{Linear Regression Regularization}
+\textbf{Trading off bias and variance}: some increase in bias can give a big decrease in variance.
+\ruler
+\textbf{Subset selection} is like $L0$ regularization:
+RSS decreases as the complexity increases because the best fit with a smaller subset is always possible with a larger subset.
+\ruler
+\textbf{Find a path through subset space}: using cross-validation and forward-stepwise selection or backward-stepwise selection (need $n > p$).
+\ruler
+\textbf{Ridge regression} is like $L2$ regularization:
+$\hat{\bbeta} = \text{arg }\min_{\bbeta}(\sum_{i=1}^n(y_i-\tp{\bx}_i\bbeta)^2 + \lambda\sum_{j=1}{p}\beta_j^2)$\\
+$\hat{\bbeta}^{\text{ridge}}=\inv{(\tp{\bX}\bX+\lambda\bI)}\tp{\bx}\by$
+\ruler
+\textbf{Lasso regression} is like $L1$ regularization:
+$\hat{\bbeta} = \text{arg }\min_{\bbeta}(\sum_{i=1}^n(y_i-\tp{\bx}_i\bbeta)^2 + \lambda\sum_{j=1}{p}|\beta_j|)$
+% \ruler
+\columnbreak\\
+While ridge regression leads to reduced, but non-zero values of the coefficients,
+Lasso regression forces some coefficients to be zero.
+\ruler
+\textbf{Bayesian analysis}:
+Ridge regression is equivalent to a MAP estimate with a gaussian prior.
+Lasso regression is equivalent to a MAP estimate with a Laplace prior.
+% --------------------------------
+
+\section{Logistic Regression}
+Model \textbf{log odds} ($\log p/(1-p)$) as an affine function of $\bx$.
+\ruler
+$P(Y=1|\bx)=\frac{1}{1+\text{exp}(\tp{\bbeta}\bx)}$
+Given data $(\bX_1, Y_1),\dots,(\bX_n, Y_n) \in \R^{p} \times \{0,1\}$,
+estimate $\bbeta$ with maximum likelihood.
+\ruler
+\textbf{Log likelihood}:\\
+$\ell(\bbeta) = \sum_{i=1}^{n}y_i\log \mu_i(\bbeta)+(1-y_i)\log(1-\mu_i(\bbeta))$,\\
+where $\mu_i(\bbeta) = P(Y=1|\bX=\bx_i,\bbeta)=\frac{1}{1+\text{exp}(-\tp{\bbeta}\bx_i)}$
+\ruler
+$\nabla_{\bbeta}\mu_i(\bbeta) = \mu_i(\bbeta)(1-\mu_i(\bbeta))\bx_i$\\
+$\nabla_{\bbeta}\ell(\bbeta)=\sum_{i=1}^{n}(y_i-\mu_i(\bbeta))\bx_i = \tp{\bX}(\by-\bmu)$\\
+$\nabla_{\bbeta}^2\ell(\bbeta)=\sum_{i=1}^{n}-\mu_i(\bbeta)(1-\mu_i(\bbeta))\bx_i\tp{\bx}_i = -\tp{\bX}\diag(\bmu(1-\bmu))\bX$
+$\hat{\bbeta}^{\text{ml}}$ solves: $\sum_{i=1}^{n}y_i\bx_i=\sum_{i=1}^{n}\mu_i{\bbeta}\bx_i$
+\ruler
+\textbf{Gradient ascent}:\\
+$\bbeta^{(t+1)}=\bbeta^{(t)}+\eta\nabla_{\bbeta}\ell(\bbeta^{(t)})$ : $O(np)$/step\\
+\textbf{Stochastic gradient ascent}:\\
+$\bbeta^{(t+1)}=\bbeta^{(t)}+\eta(y_{i_{t}}-\mu_{i_{t}}(\bbeta^{(t)}))\bx_{i_{t}}$ : $O(p)$/step\\
+\textbf{Newton-Raphson method}:\\
+$\bbeta^{(t+1)}=\bbeta^{(t)}-\inv{[\nabla_{\bbeta}^2\ell(\bbeta^{(t)})]}\nabla_{\bbeta}\ell(\bbeta^{(t)})$
+\ruler
+\textbf{Newton's method for root finding}:
+$x_{n+1} = x_{n} - \frac{f(x_n)}{f^{\prime}(x_n)}$
+\ruler
+\textbf{Prediction}
+$
+\hat{p}(y|\bx)=
+\begin{cases}
+    P(Y=1 |\bx),  & \text{if } y=1\\
+    P(Y=-1|\bx),  & \text{if } y=-1\\
+\end{cases}
+$\\
+\textbf{Log loss (Binomial Deviance)}:
+$\ell_\text{log}(\hat{p}(\cdot|\bx),y)=-\log(\hat{p}(y|\bx))$\\
+\textbf{Minimize}:
+$\frac{1}{n}\sum_{i=1}^{n}\log(1+\text{exp}(-y_i\tp{\bbeta}\bx_i))$
+% --------------------------------
+
+\section{Linear Discriminant Analysis}
+\textbf{Linear discriminant functions}:\\
+$\delta_k(\bx) = \tp{\bmu}_k\inv{\bSigma}\bx - \frac{1}{2}\tp{\bmu}_k\inv{\bSigma}\bmu_k + \log\pi_k$
+\ruler
+\textbf{Estimate with Maximum likelihood}:\\
+$\pi_k = P(Y=k) \Leftrightarrow \hat{\pi}_k = \frac{n_k}{n}$\\
+$\bmu_k = \E[\bX|Y=k] \Leftrightarrow \hat{\bmu}_k = \frac{1}{n_k}\sum_{i:y_i=k}\bx_i$\\
+$\bSigma = \text{Var}[\bX|Y=k] \Leftrightarrow \hat{\bSigma} = \frac{1}{n}\sum_{k}\sum{i:y_i=k}(\bx_i-\bmu_k)\tp{(\bx_i-\bmu_k)}$
+
+\section{SVM with Convex Optimization}
+\textbf{Lagrangian}: rewrite constraint as penalties for a convex optimization problem
+such that $L(x,\lambda)=f_0(x)+\sum_{i=1}^{m}\lambda_{i}f_{i}(x)$.
+\ruler
+\textbf{Weak duality}:
+$\underbrace{p^*=\min_{x}\max_{\lambda\geq0}L(x,\lambda)}_\text{primal}\geq\underbrace{\max_{\lambda\geq0}\min_{x}L(x,\lambda)=d^*}_\text{dual}$
+% \ruler
+\columnbreak\\
+\textbf{Strong duality}: \\
+if there is a saddle point $(x^*, \lambda^*)$ such that for all $x$ and $\lambda\geq0$,
+$L(x^*,\lambda)\leq L(x^*,\lambda^*)\leq L(x,\lambda^*)$, then primal and dual have the same value ($p^* = d^*$).
+\ruler
+\textbf{Karush-Kuhn-Tucker optimality conditions}:\\
+Primal feasibility: $f_i(x)\leq0$; Dual feasibility: $\lambda_i\geq0$\\
+Complementary slackness: $\lambda_i f_i(x)=0$\\
+Stationarity: $\nabla f_0(x)+\sum_{i}\lambda_i\nabla f_i(x) = 0$
+\ruler
+\textbf{Hard margin SVM}:\\
+$L(\btheta,\alpha) = \frac{1}{2}\norm{\btheta}^2 + \sum_{i=1}^{n}\alpha_i(1-y_i\tp{\btheta}\bx_i)$\\
+$g(\alpha)=\min_{\btheta} L(\btheta,\alpha)$\\
+setting $\btheta^* = \sum_{i=1}^{n}\alpha_i y_i \bx_i$,\\
+$g(\alpha)=\sum_{i=1}^{n}\alpha_i-\frac{1}{2}\sum_{i,j}\alpha_{i}\alpha_{j}y_{i}y_{j}\tp{\bx}_{i}\bx_{j}$
+\ruler
+\textbf{Hard margein SVM dual problem}:
+$\max_{\alpha} \sum_{i=1}^{n}\alpha_i-\frac{1}{2}\sum_{i,j}\alpha_{i}\alpha_{j}y_{i}y_{j}\tp{\bx}_{i}\bx_{j}$, s.t. $\alpha_i\geq0$ $(i=1,\dots,n)$.
+$\min_{\balpha} \frac{1}{2}\tp{\balpha}\diag(\by)\mathbf{K}\diag(\by)\balpha - \tp{\balpha}\mathbf{1}$, s.t. $\balpha\geq\mathbf{0}$.
+\ruler
+\textbf{Soft margin SVM}:\\
+$L(\btheta,\xi,\alpha,\lambda) = \frac{1}{2}\norm{\btheta}^2 + \frac{C}{n}\sum_{i=1}^{n}\xi_i + \sum_{i=1}^{n}\alpha_i(1-y_i\tp{\btheta}\bx_i-\xi_i) - \sum_{i=1}^{n}\lambda_i\xi_i$
+\ruler
+\textbf{Soft margein SVM dual problem}:
+$\min_{\balpha} \frac{1}{2}\tp{\balpha}\diag(\by)\mathbf{K}\diag(\by)\balpha - \tp{\balpha}\mathbf{1}$, s.t. $\mathbf{0}\leq\balpha\leq\frac{C}{n}$.
+
+\end{multicols*}
+\end{document}
